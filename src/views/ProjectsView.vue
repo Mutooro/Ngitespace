@@ -15,9 +15,9 @@
     </section>
 
     <!-- IMPACT STATS -->
-    <div class="impact-strip">
+    <div class="impact-strip" ref="impactRef">
       <div v-for="stat in impactStats" :key="stat.label" class="impact-stat">
-        <span class="impact-number">{{ stat.value }}</span>
+        <span class="impact-number">{{ stat.displayValue }}<span v-if="stat.suffix">{{ stat.suffix }}</span></span>
         <span class="impact-label">{{ stat.label }}</span>
       </div>
     </div>
@@ -46,7 +46,7 @@
               {{ project.highlightText }}
             </div>
             <div class="project-actions">
-              <a href="#" class="btn-donate"><i class="fas fa-heart"></i> Donate Now</a>
+              <router-link to="/donate" class="btn-donate"><i class="fas fa-heart"></i> Donate Now</router-link>
               <router-link to="/contact" class="btn-learn"><i class="fas fa-arrow-right"></i> Learn More</router-link>
             </div>
           </div>
@@ -64,7 +64,7 @@
     <div class="cta-banner">
       <h2>Want to support our <em>projects</em> and make a difference?</h2>
       <div class="cta-actions">
-        <a href="#" class="btn-gold-lg"><i class="fas fa-heart" style="margin-right:6px;"></i> Donate Now</a>
+        <router-link to="/donate" class="btn-gold-lg"><i class="fas fa-heart" style="margin-right:6px;"></i> Donate Now</router-link>
         <router-link to="/contact" class="btn-white">Contact Us</router-link>
       </div>
     </div>
@@ -72,12 +72,63 @@
 </template>
 
 <script setup>
-const impactStats = [
-  { value: '4', label: 'Active Projects' },
-  { value: '100+', label: 'Households Supported' },
-  { value: '5,000+', label: 'MT Waste Processed Daily' },
-  { value: '3', label: 'Districts Reached' }
-]
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const impactRef = ref(null)
+
+const impactStats = ref([
+  { value: 4, displayValue: 0, label: 'Active Projects' },
+  { value: 100, displayValue: 0, label: 'Households Supported', suffix: '+' },
+  { value: 5000, displayValue: 0, label: 'MT Waste Processed Daily', suffix: '+' },
+  { value: 3, displayValue: 0, label: 'Districts Reached' }
+])
+
+const animateImpactStats = () => {
+  const duration = 2000
+  const startTime = Date.now()
+
+  const animate = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+
+    impactStats.value.forEach(stat => {
+      stat.displayValue = Math.floor(stat.value * progress)
+    })
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      impactStats.value.forEach(stat => {
+        stat.displayValue = stat.value
+      })
+    }
+  }
+
+  requestAnimationFrame(animate)
+}
+
+const setupImpactObserver = () => {
+  if (!impactRef.value) return
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateImpactStats()
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.5 })
+
+  observer.observe(impactRef.value)
+
+  onUnmounted(() => {
+    observer.disconnect()
+  })
+}
+
+onMounted(() => {
+  setupImpactObserver()
+})
 
 const projects = [
   {

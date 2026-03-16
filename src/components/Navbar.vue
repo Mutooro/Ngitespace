@@ -11,6 +11,7 @@
       <li><router-link to="/projects">Projects</router-link></li>
       <li><router-link to="/beyco">BEYCO</router-link></li>
       <li><router-link to="/blog">Blog</router-link></li>
+      <!-- <li><router-link to="/gallery">Gallery</router-link></li> -->
       <li><router-link to="/contact" class="nav-cta">Contact Us</router-link></li>
     </ul>
     <button class="nav-toggle" @click="toggleMobileMenu" aria-label="Menu">
@@ -25,6 +26,7 @@
     <router-link to="/projects" @click="isMenuOpen = false">Projects</router-link>
     <router-link to="/beyco" @click="isMenuOpen = false">BEYCO</router-link>
     <router-link to="/blog" @click="isMenuOpen = false">Blog</router-link>
+    <!-- <router-link to="/gallery" @click="isMenuOpen = false">Gallery</router-link> -->
     <router-link to="/contact" @click="isMenuOpen = false">Contact Us</router-link>
   </div>
 </template>

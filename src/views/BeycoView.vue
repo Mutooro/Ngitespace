@@ -58,10 +58,10 @@
     <div class="divider"></div>
 
     <!-- COUNTERS STRIP -->
-    <div class="counters-strip">
+    <div class="counters-strip" ref="countersRef">
       <div v-for="counter in counters" :key="counter.label" class="counter-item">
         <div class="counter-num">
-          <span>{{ counter.value }}</span><span class="suffix">{{ counter.suffix }}</span>
+          <span>{{ counter.displayValue }}</span><span class="suffix">{{ counter.suffix }}</span>
         </div>
         <div class="counter-label">{{ counter.label }}</div>
       </div>
@@ -135,19 +135,63 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
+const countersRef = ref(null)
 const openWhat = ref(-1)
 
+const counters = ref([
+  { value: 6, displayValue: 0, suffix: '+', label: 'Platform Features' },
+  { value: 2, displayValue: 0, suffix: '', label: 'Supported Crops' },
+  { value: 100, displayValue: 0, suffix: '%', label: 'Data Ownership' },
+  { value: 1, displayValue: 0, suffix: '', label: 'Independent Platform' }
+])
+
+const animateCounters = () => {
+  const duration = 2000
+  const startTime = Date.now()
+
+  const animate = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+
+    counters.value.forEach(counter => {
+      counter.displayValue = Math.floor(counter.value * progress)
+    })
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      counters.value.forEach(counter => {
+        counter.displayValue = counter.value
+      })
+    }
+  }
+
+  requestAnimationFrame(animate)
+}
+
+const setupCountersObserver = () => {
+  if (!countersRef.value) return
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounters()
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.5 })
+
+  observer.observe(countersRef.value)
+
+  onUnmounted(() => {
+    observer.disconnect()
+  })
+}
+
 const benefits = [
-  { icon: 'fas fa-link', title: 'Blockchain Ownership', desc: 'BEYCO uses Blockchain technology so every actor holds full, verifiable ownership of their data.' },
+  { icon: 'fas fa-shield-alt', title: 'Blockchain Ownership', desc: 'BEYCO uses Blockchain technology so every actor holds full, verifiable ownership of their data.' },
   { icon: 'fas fa-leaf', title: 'EUDR Compliance Ready', desc: 'Built-in deforestation risk analysis that generates documentation needed to satisfy EU regulations.' },
   { icon: 'fas fa-mobile-alt', title: 'Mobile & Web Access', desc: 'The Beyco Farmer App allows producer organisations to collect data on members and production.' }
-]
-
-const counters = [
-  { value: '6', suffix: '+', label: 'Platform Features' },
-  { value: '2', suffix: '', label: 'Supported Crops' },
-  { value: '100', suffix: '%', label: 'Data Ownership' },
-  { value: '1', suffix: '', label: 'Independent Platform' }
 ]
 
 const features = [
@@ -189,7 +233,10 @@ const startAuto = () => { autoTimer = setInterval(() => nextSlide(), 5000) }
 const nextSlide = () => { currentSlide.value = (currentSlide.value + 1) % testimonials.length }
 const prevSlide = () => { currentSlide.value = (currentSlide.value - 1 + testimonials.length) % testimonials.length }
 
-onMounted(() => startAuto())
+onMounted(() => {
+  startAuto()
+  setupCountersObserver()
+})
 onUnmounted(() => clearInterval(autoTimer))
 </script>
 

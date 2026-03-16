@@ -29,22 +29,10 @@
     </section>
 
     <!-- STATS -->
-    <div class="stats-bar">
-      <div class="stat-item">
-        <div class="stat-num">2+</div>
-        <div class="stat-label">Priority Value Chains</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">7</div>
-        <div class="stat-label">Key Objectives</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">4</div>
-        <div class="stat-label">Active Projects</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Sustainability Focus</div>
+    <div class="stats-bar" ref="statsRef">
+      <div v-for="stat in stats" :key="stat.label" class="stat-item">
+        <div class="stat-num">{{ stat.displayValue }}<span v-if="stat.suffix">{{ stat.suffix }}</span></div>
+        <div class="stat-label">{{ stat.label }}</div>
       </div>
     </div>
 
@@ -231,6 +219,57 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
+const statsRef = ref(null)
+const stats = ref([
+  { label: 'Priority Value Chains', value: 2, displayValue: 0, suffix: '+' },
+  { label: 'Key Objectives', value: 7, displayValue: 0, suffix: '' },
+  { label: 'Active Projects', value: 4, displayValue: 0, suffix: '' },
+  { label: 'Sustainability Focus', value: 100, displayValue: 0, suffix: '%' }
+])
+
+const animateStats = () => {
+  const duration = 2000
+  const startTime = Date.now()
+
+  const animate = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+
+    stats.value.forEach(stat => {
+      stat.displayValue = Math.floor(stat.value * progress)
+    })
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      stats.value.forEach(stat => {
+        stat.displayValue = stat.value
+      })
+    }
+  }
+
+  requestAnimationFrame(animate)
+}
+
+const setupStatsObserver = () => {
+  if (!statsRef.value) return
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateStats()
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.5 })
+
+  observer.observe(statsRef.value)
+
+  onUnmounted(() => {
+    observer.disconnect()
+  })
+}
+
 const currentSlide = ref(0)
 const slides = [
   '/assets/img/cocoabg.webp',
@@ -243,6 +282,7 @@ onMounted(() => {
   slideInterval = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % slides.length
   }, 5000)
+  setupStatsObserver()
 })
 
 onUnmounted(() => {

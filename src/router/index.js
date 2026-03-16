@@ -53,6 +53,21 @@ const router = createRouter({
             path: '/publication_01',
             name: 'publication',
             component: () => import('../views/PublicationView.vue')
+        },
+        {
+            path: '/donate',
+            name: 'donate',
+            component: () => import('../views/DonateView.vue')
+        },
+        {
+            path: '/gallery',
+            name: 'gallery',
+            component: () => import('../views/GalleryView.vue')
+        },
+        {
+            path: '/event-details',
+            name: 'eventDetails',
+            component: () => import('../views/EventDetailsView.vue')
         }
     ],
     scrollBehavior() {

@@ -54,10 +54,10 @@
     </section>
 
     <!-- COUNTERS STRIP -->
-    <div class="counters-strip">
+    <div class="counters-strip" ref="countersRef">
       <div v-for="counter in counterItems" :key="counter.label" class="counter-item">
         <div class="counter-num">
-          <span>{{ counter.value }}</span><span class="suffix">{{ counter.suffix }}</span>
+          <span>{{ counter.displayValue }}</span><span class="suffix">{{ counter.suffix }}</span>
         </div>
         <div class="counter-label">{{ counter.label }}</div>
       </div>
@@ -168,13 +168,57 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const openWhat = ref(-1)
+const countersRef = ref(null)
 
-const counterItems = [
-  { value: '4', suffix: '+', label: 'Years of Experience' },
-  { value: '2', suffix: ' Crops', label: 'Priority Value Chains' },
-  { value: '7', suffix: '', label: 'Key Objectives' },
-  { value: '100', suffix: '%', label: 'Sustainability Focused' }
-]
+const counterItems = ref([
+  { value: 4, displayValue: 0, suffix: '+', label: 'Years of Experience' },
+  { value: 2, displayValue: 0, suffix: ' Crops', label: 'Priority Value Chains' },
+  { value: 7, displayValue: 0, suffix: '', label: 'Key Objectives' },
+  { value: 100, displayValue: 0, suffix: '%', label: 'Sustainability Focused' }
+])
+
+const animateCounters = () => {
+  const duration = 2000
+  const startTime = Date.now()
+
+  const animate = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+
+    counterItems.value.forEach(counter => {
+      counter.displayValue = Math.floor(counter.value * progress)
+    })
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      counterItems.value.forEach(counter => {
+        counter.displayValue = counter.value
+      })
+    }
+  }
+
+  requestAnimationFrame(animate)
+}
+
+const setupCountersObserver = () => {
+  if (!countersRef.value) return
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounters()
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.5 })
+
+  observer.observe(countersRef.value)
+
+  onUnmounted(() => {
+    observer.disconnect()
+  })
+}
 
 const whatWeDo = [
   { num: '01', title: 'Sustainable Sourcing', desc: 'Responsibly sourcing coffee and cocoa with full traceability — connecting ethical buyers to verified Ugandan producers.' },
@@ -224,6 +268,7 @@ const prevSlide = () => {
 
 onMounted(() => {
   startAuto()
+  setupCountersObserver()
 })
 
 onUnmounted(() => {
