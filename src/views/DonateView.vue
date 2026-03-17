@@ -61,12 +61,56 @@
             <h3>Donation Form</h3>
             <p>Fill in the form below to complete your donation</p>
           </div>
-          <div class="form-iframe-wrapper">
-            <iframe
-              src="https://docs.google.com/forms/d/e/1FAIpQLSeqz0EXV0h5BcgzqGmpwyPD9ZeYbiaI5y6eT-phGjBSHfB-rg/viewform?embedded=true"
-              frameborder="0" marginheight="0" marginwidth="0" title="Donation Form" loading="lazy">
-              Loading…
-            </iframe>
+          <div class="form-container" style="padding: 24px;">
+            <form @submit.prevent="submitForm" class="custom-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName">First Name *</label>
+                  <input type="text" id="firstName" v-model="form.firstName" required placeholder="Jane" />
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Last Name *</label>
+                  <input type="text" id="lastName" v-model="form.lastName" required placeholder="Doe" />
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" v-model="form.email" required placeholder="jane@example.com" />
+              </div>
+              
+              <div class="form-group">
+                <label for="amount">Donation Amount (USD) *</label>
+                <input type="number" id="amount" v-model="form.amount" required min="1" placeholder="e.g. 50" />
+              </div>
+              
+              <div class="form-group">
+                <label for="project">Project of Choice *</label>
+                <select id="project" v-model="form.project" required>
+                  <option value="" disabled>Select a project focus...</option>
+                  <option value="General Support">General Support (Where it's needed most)</option>
+                  <option value="Climate Adaptation">Climate Adaptation</option>
+                  <option value="Market Access">Market Access</option>
+                  <option value="Gender Equity">Gender Equity</option>
+                  <option value="Research & Advocacy">Research & Advocacy</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message (Optional)</label>
+                <textarea id="message" v-model="form.message" placeholder="Leave a message with your donation..." rows="4"></textarea>
+              </div>
+              
+              <button type="submit" class="btn-primary submit-btn" :disabled="isSubmitting">
+                <span>{{ isSubmitting ? 'Processing...' : 'Complete Donation' }}</span>
+                <i v-if="!isSubmitting" class="fas fa-heart"></i>
+                <i v-else class="fas fa-spinner fa-spin"></i>
+              </button>
+              
+              <div v-if="formStatus" :class="['form-status', formStatus.type]">
+                {{ formStatus.message }}
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -89,7 +133,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const scrollProgress = ref(0)
 const impactRef = ref(null)
@@ -142,6 +186,65 @@ const setupImpactObserver = () => {
   onUnmounted(() => {
     observer.disconnect()
   })
+}
+
+const form = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  amount: '',
+  project: '',
+  message: ''
+})
+
+const isSubmitting = ref(false)
+const formStatus = ref(null)
+
+const submitForm = async () => {
+  isSubmitting.value = true
+  formStatus.value = null
+
+  try {
+    const response = await fetch('https://formspree.io/f/xjgapoao', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: `${form.firstName} ${form.lastName}`,
+        email: form.email,
+        _replyto: form.email,
+        subject: 'New Donation Pledge',
+        _subject: `Donation Pledge from ${form.firstName} ${form.lastName}`,
+        amount_usd: form.amount,
+        project_of_choice: form.project,
+        message: form.message || 'No additional message provided.'
+      })
+    })
+
+    if (response.ok) {
+      formStatus.value = { type: 'success', message: 'Thank you for your generous pledge! We will be in touch shortly.' }
+      
+      form.firstName = ''
+      form.lastName = ''
+      form.email = ''
+      form.amount = ''
+      form.project = ''
+      form.message = ''
+    } else {
+      const data = await response.json()
+      if (Object.hasOwn(data, 'errors')) {
+        formStatus.value = { type: 'error', message: data.errors.map(error => error.message).join(', ') }
+      } else {
+        formStatus.value = { type: 'error', message: 'Oops! There was a problem processing your donation pledge.' }
+      }
+    }
+  } catch (error) {
+    formStatus.value = { type: 'error', message: 'Oops! There was a problem processing your donation pledge.' }
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 const donationUses = [
@@ -346,6 +449,106 @@ onUnmounted(() => {
   border: none;
   flex: 1;
   min-height: 800px;
+}
+
+/* Custom Styled Form for DonateView */
+.custom-form {
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--forest);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background: var(--offwhite);
+  color: var(--charcoal);
+  font-family: var(--body-font);
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  appearance: none; /* helps reset select arrows in some browsers, but optional */
+}
+
+/* Add custom arrow for the select */
+.form-group select {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%231a3d2b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 16px);
+  background-position-y: center;
+  padding-right: 48px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.submit-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  font-size: 1rem;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-status {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.form-status.success {
+  background: rgba(82, 183, 136, 0.1);
+  color: var(--leaf);
+  border: 1px solid rgba(82, 183, 136, 0.3);
+}
+
+.form-status.error {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
 .cta-banner {

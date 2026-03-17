@@ -28,10 +28,43 @@
         <span class="section-label">Send Us a Message</span>
         <h2 class="section-title" style="margin-bottom: 32px;">We'd Love to <em>Hear From You</em></h2>
         <div class="form-container">
-          <iframe
-            src="https://tally.so/embed/w7zBoa?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-            loading="lazy" width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0"
-            title="Get in touch with our team"></iframe>
+          <form @submit.prevent="submitForm" class="custom-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" v-model="form.firstName" required placeholder="John" />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" v-model="form.lastName" required placeholder="Doe" />
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" v-model="form.email" required placeholder="john@example.com" />
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <input type="text" id="subject" v-model="form.subject" required placeholder="How can we help?" />
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" v-model="form.message" required placeholder="Your message here..." rows="5"></textarea>
+            </div>
+            
+            <button type="submit" class="btn-primary submit-btn" :disabled="isSubmitting">
+              <span>{{ isSubmitting ? 'Sending...' : 'Send Message' }}</span>
+              <i v-if="!isSubmitting" class="fas fa-paper-plane"></i>
+              <i v-else class="fas fa-spinner fa-spin"></i>
+            </button>
+            
+            <div v-if="formStatus" :class="['form-status', formStatus.type]">
+              {{ formStatus.message }}
+            </div>
+          </form>
         </div>
       </div>
       
@@ -111,6 +144,8 @@
 </template>
 
 <script setup>
+import { reactive, ref } from 'vue'
+
 const contactCards = [
   { icon: 'fas fa-map-marker-alt', title: 'Office Location', content: 'Mutungo, Nakawa Division<br>P.O Box 188312, Kampala, Uganda' },
   { icon: 'fas fa-envelope', title: 'Email Address', content: '<a href="mailto:info@ngitespace.com">info@ngitespace.com</a>' },
@@ -124,8 +159,166 @@ const whyReachOut = [
   'Coffee & cocoa buyer inquiries',
   'General inquiries & donations'
 ]
+
+const form = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  subject: '',
+  message: ''
+})
+
+const isSubmitting = ref(false)
+const formStatus = ref(null)
+
+const submitForm = async () => {
+  isSubmitting.value = true
+  formStatus.value = null
+
+  try {
+    // Replace "YOUR_FORMSPREE_ENDPOINT" with the actual endpoint URL once available.
+    // Example: 'https://formspree.io/f/xXXXXXXX'
+    const response = await fetch('https://formspree.io/f/mgonpzke', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: `${form.firstName} ${form.lastName}`,
+        email: form.email,
+        _replyto: form.email,
+        subject: form.subject,
+        _subject: form.subject,
+        message: form.message
+      })
+    })
+
+    if (response.ok) {
+      formStatus.value = { type: 'success', message: 'Thank you! Your message has been sent.' }
+      // Reset form
+      form.firstName = ''
+      form.lastName = ''
+      form.email = ''
+      form.subject = ''
+      form.message = ''
+    } else {
+      const data = await response.json()
+      if (Object.hasOwn(data, 'errors')) {
+        formStatus.value = { type: 'error', message: data.errors.map(error => error.message).join(', ') }
+      } else {
+        formStatus.value = { type: 'error', message: 'Oops! There was a problem submitting your form.' }
+      }
+    }
+  } catch (error) {
+    formStatus.value = { type: 'error', message: 'Oops! There was a problem submitting your form.' }
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
 
 <style scoped>
-/* All styles are defined globally in main.css */
+/* Custom Styled Form for ContactView */
+.custom-form {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--forest);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background: var(--offwhite);
+  color: var(--charcoal);
+  font-family: var(--body-font);
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.submit-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  font-size: 1rem;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-status {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.form-status.success {
+  background: rgba(82, 183, 136, 0.1);
+  color: var(--leaf);
+  border: 1px solid rgba(82, 183, 136, 0.3);
+}
+
+.form-status.error {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .custom-form {
+    padding: 24px;
+  }
+}
+
+/* Original styles are defined globally in main.css */
 </style>
