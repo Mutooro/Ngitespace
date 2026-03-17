@@ -65,12 +65,12 @@ nav.scrolled {
 }
 
 .nav-logo img {
-  height: 36px;
+  height: 48px;
 }
 
 .nav-logo span {
   font-family: var(--heading-font);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: #fff;
   letter-spacing: 0.02em;
 }
@@ -1185,7 +1185,7 @@ footer {
 }
 
 .footer-brand img {
-  height: 40px;
+  height: 70px;
   margin-bottom: 20px;
 }
 

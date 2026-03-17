@@ -21,14 +21,27 @@
       </div>
 
       <div class="gallery-grid">
-        <a v-for="(image, index) in galleryImages" :key="index" :href="image.src" class="gallery-item">
+        <div 
+          v-for="(image, index) in galleryImages" 
+          :key="index" 
+          class="gallery-item"
+          @click="showImg(index)"
+        >
           <img :src="image.src" :alt="image.alt">
           <div class="gallery-overlay">
             <i class="fas fa-search-plus"></i>
           </div>
-        </a>
+        </div>
       </div>
     </section>
+
+    <!-- LIGHTBOX -->
+    <VueEasyLightbox
+      :visible="visibleRef"
+      :imgs="imgsRef"
+      :index="indexRef"
+      @hide="handleHide"
+    />
 
     <!-- CTA SECTION -->
     <section class="cta-section">
@@ -52,51 +65,60 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
+import VueEasyLightbox from 'vue-easy-lightbox'
 
 const galleryImages = ref([
   {
-    src: '/assets/img/agriculture/gallery_1.jpg',
+    src: '/assets/img/New_Images/gettyimages-518782849-612x612.jpg',
     alt: 'Coffee farming in Uganda'
   },
   {
-    src: '/assets/img/agriculture/gallery_2.jpg',
+    src: '/assets/img/New_Images/gettyimages-518782849-612x612.jpg',
     alt: 'Cocoa plantation'
   },
   {
-    src: '/assets/img/agriculture/gallery_3.jpg',
+    src: '/assets/img/New_Images/test_1.JPG',
     alt: 'Farmers at work'
   },
   {
-    src: '/assets/img/agriculture/gallery_4.jpg',
+    src: '/assets/img/New_Images/test_1.JPG',
     alt: 'Coffee harvesting'
   },
   {
-    src: '/assets/img/climate-change/gallery_5.jpg',
+    src: '/assets/img/New_Images/image_2.jpg',
     alt: 'Climate project'
   },
   {
-    src: '/assets/img/climate-change/gallery_6.jpg',
+    src: '/assets/img/New_Images/image_2.jpg',
     alt: 'Environmental action'
   },
   {
-    src: '/assets/img/nature/gallery_7.jpg',
+    src: '/assets/img/New_Images/image_2.jpg',
     alt: 'Natural landscape'
   },
   {
-    src: '/assets/img/nature/gallery_8.jpg',
+    src: '/assets/img/New_Images/image_2.jpg',
     alt: 'Forest conservation'
   },
   {
-    src: '/assets/img/others/gallery_9.jpg',
+    src: '/assets/img/New_Images/image_2.jpg',
     alt: 'Community event'
   }
 ])
 
-onMounted(() => {
-  // Initialize lightbox if available
-  // You can add lightbox library here if needed
-})
+const visibleRef = ref(false)
+const indexRef = ref(0)
+const imgsRef = ref(galleryImages.value.map(img => img.src))
+
+const showImg = (index) => {
+  indexRef.value = index
+  visibleRef.value = true
+}
+
+const handleHide = () => {
+  visibleRef.value = false
+}
 </script>
 
 <style scoped>

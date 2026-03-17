@@ -48,7 +48,7 @@
     </div>
     <div class="footer-bottom">
       <p>© {{ currentYear }} Ngite Space Limited. All rights reserved.</p>
-      <p>Developed by <a href="https://mutooro.xyz" target="_blank">Mutooro</a></p>
+      <!-- <p>Developed by <a href="https://mutooro.xyz" target="_blank">Mutooro</a></p> -->
     </div>
   </footer>
 </template>
