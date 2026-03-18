@@ -171,6 +171,7 @@ nav.scrolled {
   display: flex;
   align-items: center;
   overflow: hidden;
+  background: var(--forest); /* Provide a dark base for reduced image opacity */
 }
 
 .hero-bg {
@@ -179,12 +180,13 @@ nav.scrolled {
   background-size: cover;
   background-position: center;
   transition: opacity 1.2s ease;
+  opacity: 0.5 !important; /* Made images even lighter to contrast with dark background */
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(26, 61, 43, 0.88) 0%, rgba(26, 61, 43, 0.5) 60%, rgba(0, 0, 0, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(26, 61, 43, 0.95) 0%, rgba(26, 61, 43, 0.7) 60%, rgba(0, 0, 0, 0.4) 100%);
 }
 
 .hero-content {
@@ -1321,9 +1323,11 @@ footer {
     padding: 0 32px;
   }
 
-  .stats-bar {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 40px 32px;
+  .stats-bar,
+  .impact-strip,
+  .counters-strip,
+  .services-intro-badge {
+    display: none !important;
   }
 
   .stat-item:nth-child(2) {
@@ -3245,7 +3249,21 @@ footer {
     position: relative;
   }
 
+  /* Handle Stats/Impact Strips on other pages */
+  .impact-strip,
+  .counters-strip,
+  .stats-bar {
+    display: none !important;
+  }
+
   * {
     box-sizing: border-box !important;
   }
+}
+
+/* Global scroll lock class */
+.no-scroll {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
 }

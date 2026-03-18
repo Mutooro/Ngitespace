@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
@@ -40,6 +40,17 @@ const isMenuOpen = ref(false)
 const toggleMobileMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
+
+// Disable body scrolling when mobile menu is open
+watch(isMenuOpen, (open) => {
+  if (open) {
+    document.documentElement.classList.add('no-scroll')
+    document.body.classList.add('no-scroll')
+  } else {
+    document.documentElement.classList.remove('no-scroll')
+    document.body.classList.remove('no-scroll')
+  }
+})
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 60
@@ -51,6 +62,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  document.documentElement.classList.remove('no-scroll')
+  document.body.classList.remove('no-scroll')
 })
 </script>
 
