@@ -28,7 +28,7 @@
         <span class="section-label">Send Us a Message</span>
         <h2 class="section-title" style="margin-bottom: 32px;">We'd Love to <em>Hear From You</em></h2>
         <div class="form-container">
-          <form @submit.prevent="submitForm" class="custom-form">
+          <form @submit.prevent="submitForm" class="custom-form" autocomplete="on">
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName">First Name *</label>
@@ -53,6 +53,12 @@
             <div class="form-group">
               <label for="message">Message *</label>
               <textarea id="message" v-model="form.message" required placeholder="Your message here..." rows="5"></textarea>
+            </div>
+
+            <!-- Honeypot: hidden from real users, bots will fill this -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="_gotcha">Leave this empty</label>
+              <input type="text" id="_gotcha" v-model="form._gotcha" tabindex="-1" autocomplete="off" />
             </div>
             
             <button type="submit" class="btn-primary submit-btn" :disabled="isSubmitting">
@@ -165,13 +171,21 @@ const form = reactive({
   lastName: '',
   email: '',
   subject: '',
-  message: ''
+  message: '',
+  _gotcha: '' // honeypot — must stay empty
 })
 
 const isSubmitting = ref(false)
 const formStatus = ref(null)
 
 const submitForm = async () => {
+  // Honeypot check: bots fill this, humans don't
+  if (form._gotcha) {
+    // Silently fake success to not tip off bots
+    formStatus.value = { type: 'success', message: 'Thank you! Your message has been sent.' }
+    return
+  }
+
   isSubmitting.value = true
   formStatus.value = null
 
@@ -190,7 +204,8 @@ const submitForm = async () => {
         _replyto: form.email,
         subject: form.subject,
         _subject: form.subject,
-        message: form.message
+        message: form.message,
+        _gotcha: form._gotcha // Formspree also checks this server-side
       })
     })
 
@@ -202,6 +217,7 @@ const submitForm = async () => {
       form.email = ''
       form.subject = ''
       form.message = ''
+      form._gotcha = ''
     } else {
       const data = await response.json()
       if (Object.hasOwn(data, 'errors')) {
@@ -220,6 +236,18 @@ const submitForm = async () => {
 
 <style scoped>
 /* Custom Styled Form for ContactView */
+
+/* Honeypot — visually hidden but not display:none (bots skip display:none) */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
 .custom-form {
   background: #ffffff;
   padding: 40px;

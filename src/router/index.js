@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,11 +69,23 @@ const router = createRouter({
             path: '/event-details',
             name: 'eventDetails',
             component: () => import('../views/EventDetailsView.vue')
+        },
+        // 404 Catch-All
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not-found',
+            component: NotFoundView
         }
     ],
     scrollBehavior() {
         return { top: 0 }
     }
+})
+
+router.afterEach((to) => {
+    const baseTitle = 'Ngite Space Limited — Greener Value Chains'
+    const pageTitle = to.name ? to.name.charAt(0).toUpperCase() + to.name.slice(1).replace(/([A-Z])/g, ' $1') : ''
+    document.title = pageTitle ? `${pageTitle} | ${baseTitle}` : baseTitle
 })
 
 export default router

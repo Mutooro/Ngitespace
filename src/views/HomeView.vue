@@ -40,8 +40,8 @@
     <section class="about">
       <div class="about-images">
         <img src="/assets/img/New_Images/gettyimages-518782849-612x612.jpg" alt="Ngite Space coffee farming"
-          class="about-img-main">
-        <img src="/assets/img/cocoa1.jpeg" alt="Cocoa" class="about-img-accent">
+          class="about-img-main" loading="lazy">
+        <img src="/assets/img/cocoa1.jpeg" alt="Cocoa" class="about-img-accent" loading="lazy">
         <div class="about-badge-floating">
           <strong>Est.</strong>
           <span>Uganda</span>
@@ -138,7 +138,7 @@
       </div>
       <div class="projects-grid">
         <div v-for="project in projects" :key="project.title" class="project-card">
-          <img :src="project.image" :alt="project.title">
+          <img :src="project.image" :alt="project.title" loading="lazy">
           <div class="project-overlay">
             <span class="project-tag">{{ project.tag }}</span>
             <h3>{{ project.title }}</h3>
@@ -153,7 +153,7 @@
     <!-- FAQ -->
     <section class="faq">
       <div class="faq-image">
-        <img src="/assets/img/New_Images/The-Cocoa-Impact-story-1024x683.webp" alt="FAQ">
+        <img src="/assets/img/New_Images/The-Cocoa-Impact-story-1024x683.webp" alt="FAQ" loading="lazy">
         <div class="faq-image-caption">
           <strong style="color:#fff; display:block; margin-bottom:6px;">Our Mission</strong>
           Building climate resilience and adaptive capacity in the world's food system and trade, mainly coffee and cocoa
@@ -190,7 +190,7 @@
       <div class="news-grid">
         <div v-for="post in news" :key="post.title" class="news-card">
           <div class="news-thumb">
-            <img :src="post.image" :alt="post.title">
+            <img :src="post.image" :alt="post.title" loading="lazy">
             <span class="news-tag">{{ post.tag }}</span>
           </div>
           <div class="news-body">
