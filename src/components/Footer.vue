@@ -39,8 +39,8 @@
         <div class="footer-contact">
           <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>P.O Box 188312, Kampala, Uganda</span>
           </div>
-          <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+256779642488">+256 779 642 488</a></div>
-          <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+256392002153">+256 392 002 153</a></div>
+          <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+256763965806">+256 763 965 806</a></div>
+          <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+256393002153">+256 393 002 153</a></div>
           <div class="contact-item"><i class="fas fa-envelope"></i><a
               href="mailto:info@ngitespace.com">info@ngitespace.com</a></div>
         </div>

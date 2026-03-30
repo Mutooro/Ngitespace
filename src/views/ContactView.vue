@@ -98,7 +98,8 @@
             </li>
             <li>
               <i class="fas fa-phone"></i>
-              <div><a href="tel:+256779642488">+256 779 642 488</a></div>
+              <div><a href="tel:+256763965806">+256 763 965 806</a></div>
+              <div><a href="tel:+256393002153">+256 393 002 153</a></div>
             </li>
             <li>
               <i class="fas fa-envelope"></i>
@@ -155,7 +156,7 @@ import { reactive, ref } from 'vue'
 const contactCards = [
   { icon: 'fas fa-map-marker-alt', title: 'Office Location', content: 'Mutungo, Nakawa Division<br>P.O Box 188312, Kampala, Uganda' },
   { icon: 'fas fa-envelope', title: 'Email Address', content: '<a href="mailto:info@ngitespace.com">info@ngitespace.com</a>' },
-  { icon: 'fas fa-phone', title: 'Phone Number', content: '<a href="tel:+256779642488">+256 779 642 488</a>' }
+  { icon: 'fas fa-phone', title: 'Phone Number', content: '<a href="tel:+256763965806">+256 763 965 806</a>' }
 ]
 
 const whyReachOut = [

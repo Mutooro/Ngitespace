@@ -60,12 +60,12 @@ nav.scrolled {
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
   text-decoration: none;
 }
 
 .nav-logo img {
-  height: 48px;
+  height: 55px;
 }
 
 .nav-logo span {
@@ -1187,7 +1187,7 @@ footer {
 }
 
 .footer-brand img {
-  height: 70px;
+  height: 90px;
   margin-bottom: 20px;
 }
 
