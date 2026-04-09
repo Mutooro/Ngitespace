@@ -301,50 +301,90 @@ const filters = [
 const services = [
   {
     category: 'sourcing',
-    icon: 'fas fa-seedling',
-    title: 'Coffee & Cocoa Sourcing',
-    shortDesc: 'Sustainable and responsible sourcing with full traceability across the value chain, connecting buyers to verified producers.',
-    fullDesc: 'We source Arabica & Robusta coffee and fine-flavour cocoa directly from smallholder farmers in Kasese and Bundibugyo — ensuring quality, fair pricing, and full supply chain traceability for international buyers.',
-    link: '/services'
-  },
-  {
-    category: 'compliance',
-    icon: 'fas fa-leaf',
-    title: 'EUDR Due Diligence',
-    shortDesc: 'Full compliance support for the EU Deforestation Regulation — geolocation, documentation, risk assessment and traceability.',
-    fullDesc: 'We help exporters and importers meet the EU Deforestation Regulation requirements — from farm-level GPS mapping and documentation to risk assessments that satisfy EU customs authorities.',
-    link: '/eudr'
-  },
-  {
-    category: 'compliance',
-    icon: 'fas fa-map-marked-alt',
-    title: 'GIS Services',
-    shortDesc: 'Geospatial mapping and analysis for farm delineation, land use monitoring, and supply chain traceability solutions.',
-    fullDesc: 'Our GIS team provides precise farm polygon mapping, land-use change detection, and spatial data analysis — critical for EUDR compliance, environmental auditing, and traceability systems.',
-    link: '/services'
-  },
-  {
-    category: 'climate',
-    icon: 'fas fa-cloud-sun',
-    title: 'Climate Change Mitigation',
-    shortDesc: 'Adaptation strategies, carbon accounting, and cleaner production training to build resilience in farming communities.',
-    fullDesc: 'We design and implement carbon accounting systems, climate adaptation plans, and cleaner production programmes that reduce environmental footprints while maintaining productivity for farming communities.',
+    icon: 'fas fa-chart-line',
+    title: 'Trade & Analysis',
+    shortDesc: 'Comprehensive training and analysis on coffee trade dynamics and market trends.',
+    fullDesc: 'We provide deep insights into coffee trade dynamics, helping stakeholders navigate complex market trends and maximize value through data-driven analysis.',
     link: '/services'
   },
   {
     category: 'sourcing',
     icon: 'fas fa-handshake',
     title: 'Buyer Representation',
-    shortDesc: 'Helping international buyers sustainably identify and source commodities in Uganda with full local expertise and support.',
-    fullDesc: 'We act as your trusted local partner in Uganda — identifying reliable farmers, negotiating fair prices, handling logistics, and ensuring every shipment meets your quality and sustainability requirements.',
+    shortDesc: 'Sustainable sourcing representation for international coffee and cocoa buyers.',
+    fullDesc: 'We act as a trusted local partner in Uganda — identifying reliable farmers, ensuring quality standards, and managing logistics for international buyers.',
+    link: '/services'
+  },
+  {
+    category: 'sourcing',
+    icon: 'fas fa-clipboard-check',
+    title: 'Quality Assurance',
+    shortDesc: 'Third party quality assurance ensuring international standards for export products.',
+    fullDesc: 'Our rigorous third-party quality assurance services guarantee that every shipment of coffee and cocoa meets strict international export and trade standards.',
+    link: '/services'
+  },
+  {
+    category: 'sourcing',
+    icon: 'fas fa-certificate',
+    title: 'Phyto Sanitary Services',
+    shortDesc: 'Expert compliance services for agricultural export health standards.',
+    fullDesc: 'We provide expert Phyto Sanitary services for agricultural export commodities, ensuring full compliance with international plant health and safety regulations.',
+    link: '/services'
+  },
+  {
+    category: 'compliance',
+    icon: 'fas fa-file-shield',
+    title: 'EUDR Due Diligence',
+    shortDesc: 'Full support for EU Deforestation Regulation documentation and risk assessment.',
+    fullDesc: 'We help exporters and importers meet EUDR requirements through robust documentation, farm-level mapping, and comprehensive risk assessments.',
+    link: '/eudr'
+  },
+  {
+    category: 'compliance',
+    icon: 'fas fa-map-location-dot',
+    title: 'Farm Data Management',
+    shortDesc: 'Advanced data solutions for EUDR compliance and supply chain transparency.',
+    fullDesc: 'Our advanced data management solutions for farms ensure full EUDR compliance while enhancing overall supply chain transparency and data integrity.',
+    link: '/services'
+  },
+  {
+    category: 'compliance',
+    icon: 'fas fa-tree-circle-exclamation',
+    title: 'Deforestation Analysis',
+    shortDesc: 'Scientific risk analysis to protect forests and maintain ethical supply chains.',
+    fullDesc: 'We conduct scientific analysis of deforestation risks, helping companies maintain ethical supply chains and protect critical forest ecosystems in Uganda.',
+    link: '/services'
+  },
+  {
+    category: 'compliance',
+    icon: 'fas fa-earth-africa',
+    title: 'GIS Services',
+    shortDesc: 'Geospatial mapping for farm delineation and land-use monitoring.',
+    fullDesc: 'Our GIS team provides precise farm polygon mapping, land-use change detection, and spatial data analysis critical for traceability and compliance.',
+    link: '/services'
+  },
+  {
+    category: 'climate',
+    icon: 'fas fa-bullhorn',
+    title: 'Climate Advocacy',
+    shortDesc: 'Policy advocacy and public campaigns to drive systemic environmental change.',
+    fullDesc: 'We lead climate change education, public campaigns, and policy advocacy to drive systemic change and build environmental resilience across value chains.',
     link: '/services'
   },
   {
     category: 'training',
-    icon: 'fas fa-chalkboard-teacher',
-    title: 'Farmer Training',
-    shortDesc: 'Climate-smart agriculture, post-harvest handling, and value addition technologies for smallholder farmers.',
-    fullDesc: 'We run hands-on training programmes covering soil conservation, irrigation, agroforestry, post-harvest handling and value addition — equipping smallholder farmers with skills to boost yields and income.',
+    icon: 'fas fa-wheat-awn',
+    title: 'Food Security Training',
+    shortDesc: 'Resilience building through post-harvest loss management and training.',
+    fullDesc: 'We run hands-on training programmes focused on food security and post-harvest loss management, helping farming communities build long-term resilience.',
+    link: '/services'
+  },
+  {
+    category: 'climate',
+    icon: 'fas fa-microscope',
+    title: 'Climate Research',
+    shortDesc: 'Evidence-based insights to inform sustainable agricultural practices.',
+    fullDesc: 'We generate evidence-based insights through climate-focused research to inform sustainable practices and policy across agricultural value chains.',
     link: '/services'
   }
 ]

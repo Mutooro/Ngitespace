@@ -127,18 +127,17 @@ const filters = [
 ]
 
 const services = [
-  { num: 1, category: 'sourcing', icon: 'fas fa-seedling', title: 'Sustainable Sourcing', description: 'Responsibly sourcing coffee and cocoa with full traceability — connecting ethical buyers to verified Ugandan producers.' },
-  { num: 2, category: 'sourcing', icon: 'fas fa-handshake', title: 'Buyer Representation', description: 'Coffee and cocoa buyer representation — helping foreign companies and buyers sustainably identify and source quality commodities from Uganda.' },
-  { num: 3, category: 'compliance', icon: 'fas fa-file-shield', title: 'EUDR Due Diligence', description: 'Supporting companies in meeting EU Deforestation Regulation requirements through documentation, GIS mapping and comprehensive risk assessment.' },
-  { num: 4, category: 'compliance', icon: 'fas fa-map-location-dot', title: 'GIS Services', description: 'Geographic Information System services for farm mapping, land-use monitoring, and spatial analysis to support traceability and compliance.' },
-  { num: 5, category: 'sourcing', icon: 'fas fa-clipboard-check', title: 'Quality Assurance', description: 'Third party quality assurance services ensuring coffee and cocoa products meet international standards for export and trade.' },
-  { num: 6, category: 'training', icon: 'fas fa-cloud-sun', title: 'Climate Smart Agriculture', description: 'Training smallholder farmers on climate-smart agriculture practices including irrigation, soil conservation, and agroforestry techniques.' },
-  { num: 7, category: 'training', icon: 'fas fa-industry', title: 'Cleaner Production Training', description: 'Cleaner production and value addition trainings for agro-processing companies to reduce environmental impact while improving output quality.' },
-  { num: 8, category: 'climate', icon: 'fas fa-leaf', title: 'Carbon Accounting', description: 'Carbon footprint accounting and environmental auditing for agro-processing firms — helping companies discover and manage their environmental impact.' },
-  { num: 9, category: 'climate', icon: 'fas fa-recycle', title: 'Waste Disposal & Recycling', description: 'Responsible waste disposal and recycling using the Cradle to Cradle principle — making waste a raw material for new products through innovation.' },
-  { num: 10, category: 'climate', icon: 'fas fa-bullhorn', title: 'Climate Advocacy', description: 'Climate change education, public campaigns and policy advocacy to drive systemic change in coffee and cocoa value chains.' },
-  { num: 11, category: 'training', icon: 'fas fa-wheat-awn', title: 'Food Security Training', description: 'Food security and post-harvest loss management trainings to help farming communities build resilience and reduce waste.' },
-  { num: 12, category: 'climate', icon: 'fas fa-microscope', title: 'Climate Research', description: 'Climate-focused research generating evidence-based insights to inform sustainable practices across agricultural value chains.' }
+  { num: 1, category: 'sourcing', icon: 'fas fa-chart-line', title: 'Coffee Trade & Market Analysis', description: 'Comprehensive training and analysis on coffee trade dynamics, helping stakeholders navigate market trends and maximize value.' },
+  { num: 2, category: 'sourcing', icon: 'fas fa-handshake', title: 'Buyer Representation', description: 'Professional representation for coffee and cocoa buyers — sustainably identifying and sourcing premium quality commodities across Uganda.' },
+  { num: 3, category: 'sourcing', icon: 'fas fa-clipboard-check', title: 'Quality Assurance', description: 'Third party quality assurance services ensuring coffee and cocoa products meet the highest international standards for export and trade.' },
+  { num: 4, category: 'sourcing', icon: 'fas fa-certificate', title: 'Phyto Sanitary Services', description: 'Expert Phyto Sanitary services for agricultural export commodities, ensuring full compliance with international plant health standards.' },
+  { num: 5, category: 'compliance', icon: 'fas fa-file-shield', title: 'EUDR Due Diligence', description: 'Supporting companies in meeting EU Deforestation Regulation requirements through robust documentation and comprehensive risk assessment.' },
+  { num: 6, category: 'compliance', icon: 'fas fa-map-location-dot', title: 'Farm Data Management', description: 'Advanced data management solutions for farms to ensure full EUDR compliance and data-driven supply chain transparency.' },
+  { num: 7, category: 'compliance', icon: 'fas fa-tree-circle-exclamation', title: 'Deforestation Risk Analysis', description: 'Scientific analysis of deforestation risks to help companies maintain ethical supply chains and protect critical forest ecosystems.' },
+  { num: 8, category: 'compliance', icon: 'fas fa-earth-africa', title: 'GIS Services', description: 'Geographic Information System services for precise farm mapping, land-use monitoring, and spatial analysis to support traceability.' },
+  { num: 9, category: 'climate', icon: 'fas fa-bullhorn', title: 'Climate Advocacy', description: 'Climate change education, public campaigns, and policy advocacy to drive systemic change and environmental resilience.' },
+  { num: 10, category: 'training', icon: 'fas fa-wheat-awn', title: 'Food Security Training', description: 'Food security and post-harvest loss management trainings to help farming communities build resilience and reduce waste.' },
+  { num: 11, category: 'climate', icon: 'fas fa-microscope', title: 'Climate Research', description: 'Climate-focused research generating evidence-based insights to inform sustainable practices across agricultural value chains.' }
 ]
 
 const filteredServices = computed(() => {
