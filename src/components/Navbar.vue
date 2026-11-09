@@ -1,5 +1,5 @@
 <template>
-  <nav id="mainNav" :class="{ 'scrolled': isScrolled }">
+  <nav id="mainNav" :class="{ 'scrolled': isScrolled }" aria-label="Primary navigation">
     <router-link to="/" class="nav-logo">
       <img src="/assets/img/ngite_space_logo.png" alt="Ngite Space">
       <span>Ngite Space</span>
@@ -14,12 +14,19 @@
       <!-- <li><router-link to="/gallery">Gallery</router-link></li> -->
       <li><router-link to="/contact" class="nav-cta">Contact Us</router-link></li>
     </ul>
-    <button class="nav-toggle" @click="toggleMobileMenu" aria-label="Menu">
-      <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'" id="menuIcon"></i>
+    <button
+      class="nav-toggle"
+      type="button"
+      @click="toggleMobileMenu"
+      :aria-expanded="isMenuOpen"
+      aria-controls="mobileMenu"
+      :aria-label="isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
+    >
+      <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'" id="menuIcon" aria-hidden="true"></i>
     </button>
   </nav>
 
-  <div class="mobile-menu" :class="{ 'open': isMenuOpen }" id="mobileMenu">
+  <nav class="mobile-menu" :class="{ 'open': isMenuOpen }" id="mobileMenu" aria-label="Mobile navigation" :aria-hidden="!isMenuOpen">
     <router-link to="/" @click="isMenuOpen = false">Home</router-link>
     <router-link to="/about" @click="isMenuOpen = false">About</router-link>
     <router-link to="/services" @click="isMenuOpen = false">Services</router-link>
@@ -28,14 +35,20 @@
     <router-link to="/blog" @click="isMenuOpen = false">Blog</router-link>
     <!-- <router-link to="/gallery" @click="isMenuOpen = false">Gallery</router-link> -->
     <router-link to="/contact" @click="isMenuOpen = false">Contact Us</router-link>
-  </div>
+  </nav>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
+const route = useRoute()
+
+watch(() => route.fullPath, () => {
+  isMenuOpen.value = false
+})
 
 const toggleMobileMenu = () => {
   isMenuOpen.value = !isMenuOpen.value

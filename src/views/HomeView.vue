@@ -1,301 +1,156 @@
 <template>
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="hero">
-      <div class="hero-bg" id="heroBg" :style="{ backgroundImage: `url(${slides[currentSlide]})` }"></div>
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <div class="hero-badge">Uganda · Coffee & Cocoa Value Chains</div>
-        <h1>Home of <em>Greener</em><br>Value Chains</h1>
-        <p>Ngite Space Ltd bridges producers, traders, and climate activists — fostering sustainable sourcing, EUDR
-          compliance, and cleaner production across coffee and cocoa value chains in Uganda.</p>
-        <div class="hero-actions">
-          <router-link to="/about" class="btn-primary">
-            Discover More <i class="fas fa-arrow-right"></i>
+  <main class="home-page">
+    <HomeHero />
+
+    <section id="home-impact" class="home-impact" aria-label="Ngite Space at a glance">
+      <div class="home-container home-impact-grid">
+        <article v-for="stat in stats" :key="stat.label" class="home-impact-item">
+          <p class="home-impact-value">{{ stat.value }}<span>{{ stat.suffix }}</span></p>
+          <p class="home-impact-label">{{ stat.label }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="home-section home-story" aria-labelledby="home-story-title">
+      <div class="home-container home-story-grid">
+        <div class="home-story-visual">
+          <img
+            class="home-story-main-image"
+            src="/assets/img/New_Images/gettyimages-518782849-612x612.jpg"
+            alt="Ugandan coffee farmer tending a coffee tree"
+            loading="lazy"
+          />
+          <img
+            class="home-story-accent-image"
+            src="/assets/img/cocoa1.jpeg"
+            alt="Cocoa beans ready for processing"
+            loading="lazy"
+          />
+          <div class="home-origin-badge"><strong>Rooted</strong><span>in Uganda</span></div>
+        </div>
+
+        <div class="home-story-copy">
+          <p class="home-kicker">Who we are</p>
+          <h2 id="home-story-title" class="home-section-title">Growing a <em>sustainable</em> future for coffee &amp; cocoa.</h2>
+          <p>
+            Ngite Space Limited is an agro-processing and climate-focused company registered in Uganda (Reg. No. 80034879454906), dedicated to sustainable food production and responsible trade.
+          </p>
+          <p>
+            We bridge producers, traders, consumers, and climate advocates — championing cleaner production and stronger value chains from local communities to global markets.
+          </p>
+          <ul class="home-values" aria-label="Our values">
+            <li><i class="fas fa-check" aria-hidden="true"></i> Sustainability</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Collaboration</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Trust</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Accountability</li>
+          </ul>
+          <router-link to="/about" class="home-button home-button-dark">
+            More about Ngite Space <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </router-link>
-          <router-link to="/services" class="btn-outline">
-            Our Services
+        </div>
+      </div>
+    </section>
+
+    <HomeServices :services="services" />
+
+    <section class="home-section home-objectives" aria-labelledby="home-objectives-title">
+      <div class="home-container home-objectives-layout">
+        <div class="home-objectives-intro">
+          <p class="home-kicker home-kicker-light">Our direction</p>
+          <h2 id="home-objectives-title" class="home-section-title">Progress with<br /><em>purpose.</em></h2>
+          <p>Our work is guided by clear, impact-driven objectives that shape every partnership, project, and programme across Uganda&apos;s coffee and cocoa sectors.</p>
+          <router-link to="/about" class="home-light-link">The values behind our work <i class="fas fa-arrow-right" aria-hidden="true"></i></router-link>
+        </div>
+        <ol class="home-objective-list">
+          <li v-for="(objective, index) in objectives" :key="objective">
+            <span class="home-objective-number">{{ String(index + 1).padStart(2, '0') }}</span>
+            <span>{{ objective }}</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="home-section home-projects" aria-labelledby="home-projects-title">
+      <div class="home-container">
+        <div class="home-section-heading home-section-heading-spread">
+          <div>
+            <p class="home-kicker">On the ground</p>
+            <h2 id="home-projects-title" class="home-section-title">Local action.<br /><em>Lasting impact.</em></h2>
+          </div>
+          <router-link to="/projects" class="home-text-link home-view-all">
+            View all projects <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </router-link>
+        </div>
+
+        <div class="home-project-grid">
+          <router-link v-for="project in projects" :key="project.title" to="/projects" class="home-project-card">
+            <img :src="project.image" alt="" loading="lazy" />
+            <span class="home-project-shade" aria-hidden="true"></span>
+            <span class="home-project-category">{{ project.tag }}</span>
+            <span class="home-project-title">{{ project.title }}</span>
+            <span class="home-project-link">See project <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
           </router-link>
         </div>
       </div>
-      <div class="hero-scroll">
-        <div class="hero-scroll-line"></div>
-        Scroll
-      </div>
-      <div class="hero-dots">
-        <div v-for="(slide, index) in slides" :key="index" class="hero-dot" :class="{ active: currentSlide === index }"
-          @click="currentSlide = index"></div>
-      </div>
     </section>
 
-    <!-- STATS -->
-    <div class="stats-bar" ref="statsRef">
-      <div v-for="stat in stats" :key="stat.label" class="stat-item">
-        <div class="stat-num">{{ stat.displayValue }}<span v-if="stat.suffix">{{ stat.suffix }}</span></div>
-        <div class="stat-label">{{ stat.label }}</div>
-      </div>
-    </div>
+    <HomeFaq :items="faqs" />
 
-    <!-- ABOUT -->
-    <section class="about">
-      <div class="about-images">
-        <img src="/assets/img/New_Images/gettyimages-518782849-612x612.jpg" alt="Ngite Space coffee farming"
-          class="about-img-main" loading="lazy">
-        <img src="/assets/img/cocoa1.jpeg" alt="Cocoa" class="about-img-accent" loading="lazy">
-        <div class="about-badge-floating">
-          <strong>Est.</strong>
-          <span>Uganda</span>
-        </div>
-      </div>
-      <div class="about-text-col">
-        <span class="section-label">Who We Are</span>
-        <h2 class="section-title">Growing a <em>sustainable</em> future for coffee & cocoa</h2>
-        <p class="about-text">Ngite Space Limited is an agro-processing and climate change focused company registered
-          under the laws of Uganda (Reg. No. 80034879454906), dedicated to fostering sustainable food production and
-          responsible trade in the era of climate change.</p>
-        <p class="about-text">Our business strategy bridges the gap between producers, traders, consumers and climate
-          change activists in the world's food system — championing cleaner production technologies to guarantee greener
-          value chains.</p>
-        <div class="about-values">
-          <div class="value-pill"><i class="fas fa-check-circle"></i> Sustainability</div>
-          <div class="value-pill"><i class="fas fa-check-circle"></i> Collaboration</div>
-          <div class="value-pill"><i class="fas fa-check-circle"></i> Trust</div>
-          <div class="value-pill"><i class="fas fa-check-circle"></i> Accountability</div>
-        </div>
-        <router-link to="/about" class="btn-primary" style="width: fit-content;">
-          Learn More About Us <i class="fas fa-arrow-right"></i>
-        </router-link>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- SERVICES -->
-    <section class="services">
-      <div class="services-header">
-        <span class="section-label">What We Offer</span>
-        <h2 class="section-title">Our Core <em>Services</em></h2>
-      </div>
-
-      <!-- Filter Tabs -->
-      <div class="service-filters">
-        <button v-for="filter in filters" :key="filter.id" class="filter-btn"
-          :class="{ active: currentFilter === filter.id }" @click="currentFilter = filter.id">
-          {{ filter.label }}
-        </button>
-      </div>
-
-      <div class="services-grid">
-        <div v-for="service in filteredServices" :key="service.title" class="service-card-wrap">
-          <div class="service-card-inner">
-            <div class="card-front">
-              <div class="service-icon"><i :class="service.icon"></i></div>
-              <h3>{{ service.title }}</h3>
-              <p>{{ service.shortDesc }}</p>
-              <div class="card-hint"><i class="fas fa-sync-alt"></i> Hover to learn more</div>
-            </div>
-            <div class="card-back">
-              <div>
-                <div class="card-back-icon"><i :class="service.icon"></i></div>
-                <h4>{{ service.title }}</h4>
-                <p>{{ service.fullDesc }}</p>
-              </div>
-              <router-link :to="service.link" class="service-link">Explore Service <i
-                  class="fas fa-arrow-right"></i></router-link>
-            </div>
+    <section class="home-section home-news" aria-labelledby="home-news-title">
+      <div class="home-container">
+        <div class="home-section-heading home-section-heading-spread">
+          <div>
+            <p class="home-kicker">Stay informed</p>
+            <h2 id="home-news-title" class="home-section-title">Ideas for a<br /><em>greener future.</em></h2>
           </div>
+          <router-link to="/blog" class="home-text-link home-view-all">
+            Visit the journal <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </router-link>
+        </div>
+
+        <div class="home-news-grid">
+          <article v-for="post in news" :key="post.title" class="home-news-card">
+            <router-link :to="post.link" class="home-news-image-link" :aria-label="`Read ${post.title}`">
+              <img :src="post.image" :alt="post.imageAlt" loading="lazy" />
+              <span class="home-news-category">{{ post.category }}</span>
+            </router-link>
+            <div class="home-news-copy">
+              <p class="home-news-byline">{{ post.author }} <span aria-hidden="true">/</span> {{ post.topic }}</p>
+              <h3><router-link :to="post.link">{{ post.title }}</router-link></h3>
+              <router-link :to="post.link" class="home-text-link">Read the story <i class="fas fa-arrow-right" aria-hidden="true"></i></router-link>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- OBJECTIVES -->
-    <section class="objectives">
-      <div class="objectives-grid">
-        <div class="objectives-left">
-          <span class="section-label">Our Direction</span>
-          <h2 class="section-title">Key <em>Objectives</em> Driving Our Work</h2>
-          <p>We are guided by clear, impact-driven objectives that shape every partnership, project, and program we
-            undertake across Uganda's coffee and cocoa sectors.</p>
-        </div>
+    <section class="home-cta" aria-labelledby="home-cta-title">
+      <div class="home-container home-cta-content">
         <div>
-          <ol class="obj-list">
-            <li v-for="(obj, index) in objectives" :key="index">
-              <span class="obj-num">0{{ index + 1 }}.</span> {{ obj }}
-            </li>
-          </ol>
+          <p class="home-kicker home-kicker-light">Let&apos;s build what&apos;s next</p>
+          <h2 id="home-cta-title">A greener future is a <em>shared effort.</em></h2>
+        </div>
+        <div class="home-cta-actions">
+          <router-link to="/contact" class="home-button home-button-gold">
+            Start a conversation <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </router-link>
+          <router-link to="/services" class="home-light-link">Explore our services</router-link>
         </div>
       </div>
     </section>
-
-    <!-- PROJECTS -->
-    <section class="projects">
-      <div class="projects-header">
-        <div>
-          <span class="section-label">What We're Doing</span>
-          <h2 class="section-title">Company <em>Projects</em></h2>
-        </div>
-        <router-link to="/projects" class="btn-primary">View All Projects <i class="fas fa-arrow-right"></i></router-link>
-      </div>
-      <div class="projects-grid">
-        <div v-for="project in projects" :key="project.title" class="project-card">
-          <img :src="project.image" :alt="project.title" loading="lazy">
-          <div class="project-overlay">
-            <span class="project-tag">{{ project.tag }}</span>
-            <h3>{{ project.title }}</h3>
-            <router-link to="/projects" class="project-cta">See Details <i class="fas fa-arrow-right"></i></router-link>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- FAQ -->
-    <section class="faq">
-      <div class="faq-image">
-        <img src="/assets/img/New_Images/The-Cocoa-Impact-story-1024x683.webp" alt="FAQ" loading="lazy">
-        <div class="faq-image-caption">
-          <strong style="color:#fff; display:block; margin-bottom:6px;">Our Mission</strong>
-          Building climate resilience and adaptive capacity in the world's food system and trade, mainly coffee and cocoa
-          value chains.
-        </div>
-      </div>
-      <div>
-        <span class="section-label">FAQ</span>
-        <h2 class="section-title">Have Any <em>Questions?</em></h2>
-        <br>
-        <div class="accordion">
-          <div v-for="(item, index) in faqs" :key="index" class="accordion-item" :class="{ open: openFaq === index }">
-            <div class="accordion-head" @click="openFaq = openFaq === index ? -1 : index">
-              <h3>{{ item.question }}</h3>
-              <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="accordion-body">
-              <p>{{ item.answer }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- NEWS -->
-    <section class="news">
-      <div class="news-header">
-        <div>
-          <span class="section-label">Stay Informed</span>
-          <h2 class="section-title">Latest News & <em>Updates</em></h2>
-        </div>
-        <router-link to="/blog" class="btn-primary">All Articles <i class="fas fa-arrow-right"></i></router-link>
-      </div>
-      <div class="news-grid">
-        <div v-for="post in news" :key="post.title" class="news-card">
-          <div class="news-thumb">
-            <img :src="post.image" :alt="post.title" loading="lazy">
-            <span class="news-tag">{{ post.tag }}</span>
-          </div>
-          <div class="news-body">
-            <div class="news-meta">
-              <span><i class="fas fa-user"></i> {{ post.author }}</span>
-              <span><i class="fas fa-tag"></i> {{ post.category }}</span>
-            </div>
-            <h3><router-link :to="post.link">{{ post.title }}</router-link></h3>
-            <router-link :to="post.link" class="service-link">Read More <i class="fas fa-arrow-right"></i></router-link>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA BANNER -->
-    <div class="cta-banner">
-      <h2>Ready to build a <em>greener</em>, more sustainable future together?</h2>
-      <div class="cta-actions">
-        <router-link to="/contact" class="btn-gold">Get In Touch</router-link>
-        <router-link to="/services" class="btn-white">Our Services</router-link>
-      </div>
-    </div>
   </main>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import HomeFaq from '../components/HomeFaq.vue'
+import HomeHero from '../components/HomeHero.vue'
+import HomeServices from '../components/HomeServices.vue'
 
-const statsRef = ref(null)
-const stats = ref([
-  { label: 'Priority Value Chains', value: 2, displayValue: 0, suffix: '+' },
-  { label: 'Key Objectives', value: 7, displayValue: 0, suffix: '' },
-  { label: 'Active Projects', value: 4, displayValue: 0, suffix: '' },
-  { label: 'Sustainability Focus', value: 100, displayValue: 0, suffix: '%' }
-])
-
-const animateStats = () => {
-  const duration = 2000
-  const startTime = Date.now()
-
-  const animate = () => {
-    const elapsed = Date.now() - startTime
-    const progress = Math.min(elapsed / duration, 1)
-
-    stats.value.forEach(stat => {
-      stat.displayValue = Math.floor(stat.value * progress)
-    })
-
-    if (progress < 1) {
-      requestAnimationFrame(animate)
-    } else {
-      stats.value.forEach(stat => {
-        stat.displayValue = stat.value
-      })
-    }
-  }
-
-  requestAnimationFrame(animate)
-}
-
-const setupStatsObserver = () => {
-  if (!statsRef.value) return
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateStats()
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.5 })
-
-  observer.observe(statsRef.value)
-
-  onUnmounted(() => {
-    observer.disconnect()
-  })
-}
-
-const currentSlide = ref(0)
-const slides = [
-  '/assets/img/cocoabg.webp',
-  '/assets/img/export2.webp',
-  '/assets/img/coffee3.jpeg'
-]
-
-let slideInterval
-onMounted(() => {
-  slideInterval = setInterval(() => {
-    currentSlide.value = (currentSlide.value + 1) % slides.length
-  }, 5000)
-  setupStatsObserver()
-})
-
-onUnmounted(() => {
-  clearInterval(slideInterval)
-})
-
-const currentFilter = ref('all')
-const filters = [
-  { id: 'all', label: 'All Services' },
-  { id: 'sourcing', label: 'Sourcing & Trade' },
-  { id: 'compliance', label: 'Compliance' },
-  { id: 'training', label: 'Training' },
-  { id: 'climate', label: 'Climate Action' }
+const stats = [
+  { value: '2', suffix: '+', label: 'Priority value chains' },
+  { value: '7', suffix: '', label: 'Impact objectives' },
+  { value: '4', suffix: '', label: 'Active projects' },
+  { value: '100', suffix: '%', label: 'Sustainability focus' },
 ]
 
 const services = [
@@ -303,162 +158,146 @@ const services = [
     category: 'sourcing',
     icon: 'fas fa-chart-line',
     title: 'Trade & Analysis',
-    shortDesc: 'Comprehensive training and analysis on coffee trade dynamics and market trends.',
-    fullDesc: 'We provide deep insights into coffee trade dynamics, helping stakeholders navigate complex market trends and maximize value through data-driven analysis.',
-    link: '/services'
+    shortDesc: 'Market insights that help value-chain partners make confident, data-informed decisions.',
+    link: '/services',
   },
   {
     category: 'sourcing',
     icon: 'fas fa-handshake',
     title: 'Buyer Representation',
-    shortDesc: 'Sustainable sourcing representation for international coffee and cocoa buyers.',
-    fullDesc: 'We act as a trusted local partner in Uganda — identifying reliable farmers, ensuring quality standards, and managing logistics for international buyers.',
-    link: '/services'
+    shortDesc: 'A trusted local partner connecting international buyers with reliable Ugandan producers.',
+    link: '/services',
   },
   {
     category: 'sourcing',
     icon: 'fas fa-clipboard-check',
     title: 'Quality Assurance',
-    shortDesc: 'Third party quality assurance ensuring international standards for export products.',
-    fullDesc: 'Our rigorous third-party quality assurance services guarantee that every shipment of coffee and cocoa meets strict international export and trade standards.',
-    link: '/services'
+    shortDesc: 'Independent quality checks to help coffee and cocoa meet international export standards.',
+    link: '/services',
   },
   {
     category: 'sourcing',
     icon: 'fas fa-certificate',
     title: 'Phyto Sanitary Services',
-    shortDesc: 'Expert compliance services for agricultural export health standards.',
-    fullDesc: 'We provide expert Phyto Sanitary services for agricultural export commodities, ensuring full compliance with international plant health and safety regulations.',
-    link: '/services'
+    shortDesc: 'Export support that helps agricultural products meet plant health requirements.',
+    link: '/services',
   },
   {
     category: 'compliance',
     icon: 'fas fa-file-shield',
     title: 'EUDR Due Diligence',
-    shortDesc: 'Full support for EU Deforestation Regulation documentation and risk assessment.',
-    fullDesc: 'We help exporters and importers meet EUDR requirements through robust documentation, farm-level mapping, and comprehensive risk assessments.',
-    link: '/eudr'
+    shortDesc: 'Farm-level mapping, documentation, and risk assessment for EUDR readiness.',
+    link: '/eudr',
   },
   {
     category: 'compliance',
     icon: 'fas fa-map-location-dot',
     title: 'Farm Data Management',
-    shortDesc: 'Advanced data solutions for EUDR compliance and supply chain transparency.',
-    fullDesc: 'Our advanced data management solutions for farms ensure full EUDR compliance while enhancing overall supply chain transparency and data integrity.',
-    link: '/services'
+    shortDesc: 'Reliable farm data for supply-chain traceability and compliance decisions.',
+    link: '/services',
   },
   {
     category: 'compliance',
     icon: 'fas fa-tree-circle-exclamation',
     title: 'Deforestation Analysis',
-    shortDesc: 'Scientific risk analysis to protect forests and maintain ethical supply chains.',
-    fullDesc: 'We conduct scientific analysis of deforestation risks, helping companies maintain ethical supply chains and protect critical forest ecosystems in Uganda.',
-    link: '/services'
+    shortDesc: 'Scientific risk analysis to support forest protection and responsible sourcing.',
+    link: '/services',
   },
   {
     category: 'compliance',
     icon: 'fas fa-earth-africa',
     title: 'GIS Services',
-    shortDesc: 'Geospatial mapping for farm delineation and land-use monitoring.',
-    fullDesc: 'Our GIS team provides precise farm polygon mapping, land-use change detection, and spatial data analysis critical for traceability and compliance.',
-    link: '/services'
+    shortDesc: 'Farm mapping and land-use monitoring for clearer, more transparent supply chains.',
+    link: '/services',
   },
   {
     category: 'climate',
     icon: 'fas fa-bullhorn',
     title: 'Climate Advocacy',
-    shortDesc: 'Policy advocacy and public campaigns to drive systemic environmental change.',
-    fullDesc: 'We lead climate change education, public campaigns, and policy advocacy to drive systemic change and build environmental resilience across value chains.',
-    link: '/services'
+    shortDesc: 'Education and public campaigns that help move climate action forward.',
+    link: '/services',
   },
   {
     category: 'training',
     icon: 'fas fa-wheat-awn',
     title: 'Food Security Training',
-    shortDesc: 'Resilience building through post-harvest loss management and training.',
-    fullDesc: 'We run hands-on training programmes focused on food security and post-harvest loss management, helping farming communities build long-term resilience.',
-    link: '/services'
+    shortDesc: 'Practical training in post-harvest management and climate resilience.',
+    link: '/services',
   },
   {
     category: 'climate',
     icon: 'fas fa-microscope',
     title: 'Climate Research',
-    shortDesc: 'Evidence-based insights to inform sustainable agricultural practices.',
-    fullDesc: 'We generate evidence-based insights through climate-focused research to inform sustainable practices and policy across agricultural value chains.',
-    link: '/services'
-  }
+    shortDesc: 'Evidence-based research to inform sustainable agricultural practices.',
+    link: '/services',
+  },
 ]
 
-const filteredServices = computed(() => {
-  if (currentFilter.value === 'all') return services
-  return services.filter(s => s.category === currentFilter.value)
-})
-
 const objectives = [
-  "To be the world's leading supplier of sustainable and responsibly sourced coffee and cocoa.",
-  "Help companies discover their environmental impact and compliance through carbon accounting.",
-  "Train farmers on climate-smart, post-harvest and value addition technologies.",
-  "Promote cleaner production technologies in agro-food systems and farmers' daily life.",
-  "Support communities most vulnerable to climate change in adaptation and resilience.",
-  "Conserve and restore natural ecosystems vital to climate regulation and biodiversity.",
-  "Advocate, research, and educate on climate change and sustainable agriculture."
+  'Supply sustainable and responsibly sourced coffee and cocoa.',
+  'Help companies understand environmental impact and carbon obligations.',
+  'Train farmers in climate-smart, post-harvest, and value-addition practices.',
+  'Promote cleaner production in agro-food systems and daily life.',
+  'Support communities most vulnerable to climate change.',
+  'Conserve and restore ecosystems that sustain biodiversity and climate health.',
+  'Advance climate education, research, and responsible agriculture.',
 ]
 
 const projects = [
-  { image: '/assets/img/audit.JPG', tag: 'Climate', title: 'Ngite Climate Auditorium for Coffee & Cocoa Stakeholders' },
-  { image: '/assets/img/New_Images/gettyimages-518782849-612x612.jpg', tag: 'Food Security', title: 'Food Security for Coffee & Cocoa Growing Communities' },
-  { image: '/assets/img/coffee_bg.jpeg', tag: 'Gender & Climate', title: 'Women for Climate Action' },
-  { image: '/assets/img/climate-change/event_card_img_1.jpg', tag: 'Environment', title: 'Responsible Waste Disposal' }
+  { image: '/assets/img/audit.JPG', tag: 'Climate action', title: 'Ngite Climate Auditorium for Coffee & Cocoa Stakeholders' },
+  { image: '/assets/img/New_Images/gettyimages-518782849-612x612.jpg', tag: 'Food security', title: 'Food Security for Coffee & Cocoa Communities' },
+  { image: '/assets/img/coffee_bg.jpeg', tag: 'Gender & climate', title: 'Women for Climate Action' },
+  { image: '/assets/img/climate-change/event_card_img_1.jpg', tag: 'Environment', title: 'Responsible Waste Disposal' },
 ]
 
-const openFaq = ref(0)
 const faqs = [
   {
-    question: "How does climate change impact coffee quality?",
-    answer: "Climate change significantly affects coffee quality — from flavor and aroma to bean size. Drought conditions stress plants, leading to smaller beans. Higher temperatures cause faster ripening, reducing time for complex flavor development, and also trigger pest outbreaks that reduce yields."
+    question: 'How does climate change affect coffee quality?',
+    answer: 'Changing temperatures and rainfall patterns can alter bean size, flavor, and ripening time. Drought and heat also place stress on coffee plants and can increase pest pressure, affecting both quality and yields.',
   },
   {
-    question: "What causes climate change?",
-    answer: "The primary cause is the increase in greenhouse gases — carbon dioxide, methane, and nitrous oxide — in the atmosphere. These gases trap heat, leading to global warming and climate disruption across ecosystems worldwide."
+    question: 'What is the EUDR and why does it matter?',
+    answer: 'The EU Deforestation Regulation sets due-diligence requirements for products placed on or exported from the European Union market. Farm-level data and transparent supply chains help coffee and cocoa businesses prepare for these requirements.',
   },
   {
-    question: "How can smallholder farmers survive climate change?",
-    answer: "Smallholders can adapt through agroforestry, cover cropping, drought-resistant varieties, water conservation technologies, climate finance, and farmer training. Group formation helps build stronger market connections and collective resilience."
+    question: 'How can smallholder farmers adapt to climate change?',
+    answer: 'Agroforestry, soil and water conservation, climate-smart crop practices, and farmer training can help strengthen resilience. Better market connections and collective action can also support more stable livelihoods.',
   },
   {
-    question: "How does Ngite Space advocate for climate action?",
-    answer: "We educate on climate action, support policies for renewable energy, train on cleaner production technologies, and collaborate with climate-focused organizations. Our advocacy holds value chain actors and government accountable for environmental protection."
-  }
+    question: 'How does Ngite Space support climate action?',
+    answer: 'We bring partners together around practical climate education, cleaner production, responsible sourcing, and research — with a focus on resilient coffee and cocoa communities in Uganda.',
+  },
 ]
 
 const news = [
   {
     image: '/assets/img/New_Images/eudr.webp',
-    tag: 'Environment',
-    author: 'Ngite Space',
+    imageAlt: 'Coffee and cocoa supply chain landscape',
     category: 'Regulation',
-    title: 'European Union Deforestation Regulation (EUDR) — What It Means for Uganda',
-    link: '/eudr'
+    author: 'Ngite Space',
+    topic: 'EUDR',
+    title: 'The EU Deforestation Regulation: what it means for Uganda',
+    link: '/eudr',
   },
   {
     image: '/assets/img/New_Images/step-3-990x_.webp',
-    tag: 'Research',
+    imageAlt: 'Sustainable agriculture and natural resources',
+    category: 'Research',
     author: 'Ngite Space',
-    category: 'Sustainability',
-    title: 'Climate Change and Resource Sustainability in African Agriculture',
-    link: '/publication_01'
+    topic: 'Sustainability',
+    title: 'Climate change and resource sustainability in African agriculture',
+    link: '/publication_01',
   },
   {
-    image: '/assets/img/image_2.jpg',
-    tag: 'Business',
-    author: 'Admin',
+    image: '/assets/img/New_Images/image_2.jpg',
+    imageAlt: 'Coffee beans gathered after harvest',
     category: 'Partnerships',
-    title: 'Our New Partnerships — Expanding Greener Value Chains',
-    link: '#'
-  }
+    author: 'Ngite Space',
+    topic: 'Community',
+    title: 'Building new partnerships for greener value chains',
+    link: '/blog',
+  },
 ]
 </script>
 
-<style scoped>
-/* Scoped styles are handled by main.css for now */
-</style>
+<style src="../assets/css/home.css"></style>

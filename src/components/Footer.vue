@@ -1,16 +1,14 @@
 <template>
-  <footer>
+  <footer aria-label="Site footer">
     <div class="footer-grid">
       <div class="footer-brand">
         <img src="/assets/img/ngite_space_logo.png" alt="Ngite Space">
         <p>We're committed to blending agribusiness with environmental awareness and action. Join us in making a
           difference for coffee and cocoa communities across Uganda.</p>
         <div class="social-links">
-          <a href="https://instagram.com/ngite_space" class="social-link" target="_blank"><i
-              class="fab fa-instagram"></i></a>
-          <a href="https://x.com/ngitespace" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
-          <a href="#" class="social-link" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com/ngite_space" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Ngite Space on Instagram"><i
+              class="fab fa-instagram" aria-hidden="true"></i></a>
+          <a href="https://x.com/ngitespace" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Ngite Space on X"><i class="fab fa-twitter" aria-hidden="true"></i></a>
         </div>
       </div>
       <div class="footer-col">
