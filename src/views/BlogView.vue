@@ -5,12 +5,9 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Blog</li>
-        </ol>
+        <Breadcrumbs />
         <h1>News &amp; <em>Updates</em></h1>
-        <p>Insights, research, and stories from the field — follow our journey in climate action and sustainable development.</p>
+        <p>Insights, research, and stories from the field follow our journey in climate action and sustainable development.</p>
       </div>
     </section>
 
@@ -26,7 +23,7 @@
         <article v-for="post in posts" :key="post.title" class="blog-card">
           <router-link :to="post.link" class="blog-thumb">
             <span class="blog-meta">{{ post.category }}</span>
-            <img :src="post.image" :alt="post.title">
+            <img :src="post.image" :alt="post.title" loading="lazy">
           </router-link>
           <div class="blog-content">
             <span class="blog-date">{{ post.date }}</span>
@@ -59,6 +56,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref } from 'vue'
 
 const email = ref('')

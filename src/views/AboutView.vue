@@ -5,10 +5,7 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">About Us</li>
-        </ol>
+        <Breadcrumbs />
         <h1>About <em>Ngite Space</em></h1>
       </div>
     </section>
@@ -16,7 +13,7 @@
     <!-- WHO WE ARE -->
     <section class="who-we-are">
       <div class="who-images">
-        <img src="/assets/img/New_Images/gettyimages-518782849-612x612.jpg" alt="Ngite Space coffee farming" class="who-img-main">
+        <img src="/assets/img/New_Images/gettyimages-518782849-612x612.jpg" alt="Ngite Space coffee farming" class="who-img-main" loading="lazy" width="612" height="459">
       </div>
       <div>
         <span class="section-label">Our Story</span>
@@ -94,23 +91,50 @@
     <!-- WHAT WE DO -->
     <section class="what-we-do">
       <div class="what-header">
-        <span class="section-label" style="color: var(--sage);">Our Work</span>
+        <span class="section-label">Our Work</span>
         <h2 class="section-title">What We <em>Do</em></h2>
         <p>We operate across the full spectrum of sustainable agriculture and climate action — from the farm gate to
           international markets.</p>
       </div>
       <div class="what-grid">
-        <div v-for="(item, index) in whatWeDo" :key="item.num" 
-             class="what-item" :class="{ open: openWhat === index }" 
-             @click="openWhat = openWhat === index ? -1 : index">
-          <div class="what-num">{{ item.num }}</div>
-          <h4>{{ item.title }} <span class="expand-icon">{{ openWhat === index ? '−' : '+' }}</span></h4>
-          <p>{{ item.desc }}</p>
+        <div v-for="(item, index) in whatWeDo" :key="item.num"
+             class="what-item" :class="{ open: openWhat === index }">
+          <div class="what-num" aria-hidden="true">{{ item.num }}</div>
+          <h4>
+            <button type="button" class="what-toggle"
+              :aria-expanded="openWhat === index ? 'true' : 'false'"
+              :aria-controls="`what-panel-${index}`"
+              @click="openWhat = openWhat === index ? -1 : index">
+              {{ item.title }}<span class="expand-icon" aria-hidden="true">{{ openWhat === index ? '−' : '+' }}</span>
+            </button>
+          </h4>
+          <div class="what-panel" :id="`what-panel-${index}`" role="region" :aria-label="item.title">
+            <p>{{ item.desc }}</p>
+          </div>
         </div>
       </div>
     </section>
 
     <div class="divider" style="margin-top: 0;"></div>
+
+    <!-- OBJECTIVES -->
+    <section class="objectives">
+      <div class="objectives-grid">
+        <div class="objectives-left">
+          <span class="section-label">Our Direction</span>
+          <h2 class="section-title">Key <em>Objectives</em> Driving Our Work</h2>
+          <p>We are guided by clear, impact-driven objectives that shape every partnership, project, and program we
+            undertake across Uganda's coffee and cocoa sectors.</p>
+        </div>
+        <div>
+          <ol class="obj-list">
+            <li v-for="(obj, index) in objectives" :key="index">
+              <span class="obj-num">0{{ index + 1 }}.</span> {{ obj }}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
 
     <!-- TESTIMONIALS -->
     <section class="testimonials">
@@ -121,14 +145,14 @@
       </div>
 
       <div class="testi-slider">
-        <button class="testi-arrow prev" @click="prevSlide"><i class="fas fa-arrow-left"></i></button>
+        <button class="testi-arrow prev" aria-label="Previous testimonial" @click="prevSlide"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
 
         <div class="testi-track">
           <div class="testi-slides" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-            <div v-for="(testi, index) in testimonials" :key="index" class="testi-slide" :class="{ active: currentSlide === index }">
-              <div class="testi-big-quote">"</div>
-              <div class="stars">
-                <i v-for="n in 5" :key="n" class="fas fa-star"></i>
+            <div v-for="(testi, index) in testimonials" :key="index" class="testi-slide" :class="{ active: currentSlide === index }" :inert="currentSlide !== index">
+              <div class="testi-big-quote" aria-hidden="true">"</div>
+              <div class="stars" role="img" aria-label="Rated 5 out of 5">
+                <i v-for="n in 5" :key="n" class="fas fa-star" aria-hidden="true"></i>
               </div>
               <blockquote>{{ testi.quote }}</blockquote>
               <div class="testi-divider"></div>
@@ -144,12 +168,16 @@
           </div>
         </div>
 
-        <button class="testi-arrow next" @click="nextSlide"><i class="fas fa-arrow-right"></i></button>
+        <button class="testi-arrow next" aria-label="Next testimonial" @click="nextSlide"><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
       </div>
 
       <!-- Dots -->
-      <div class="carousel-controls">
-        <div v-for="(_, index) in testimonials" :key="index" class="carousel-dot" :class="{ active: currentSlide === index }" @click="currentSlide = index"></div>
+      <div class="carousel-controls" role="group" aria-label="Choose testimonial">
+        <button v-for="(testi, index) in testimonials" :key="index" type="button" class="carousel-dot"
+          :class="{ active: currentSlide === index }"
+          :aria-label="`Show testimonial from ${testi.name}`"
+          :aria-current="currentSlide === index ? 'true' : undefined"
+          @click="currentSlide = index"></button>
       </div>
     </section>
 
@@ -165,6 +193,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const openWhat = ref(-1)
@@ -220,8 +249,18 @@ const setupCountersObserver = () => {
   })
 }
 
+const objectives = [
+  "To be the world's leading supplier of sustainable and responsibly sourced coffee and cocoa.",
+  "Help companies discover their environmental impact and compliance through carbon accounting.",
+  "Train farmers on climate-smart, post-harvest and value addition technologies.",
+  "Promote cleaner production technologies in agro-food systems and farmers' daily life.",
+  "Support communities most vulnerable to climate change in adaptation and resilience.",
+  "Conserve and restore natural ecosystems vital to climate regulation and biodiversity.",
+  "Advocate, research, and educate on climate change and sustainable agriculture."
+]
+
 const whatWeDo = [
-  { num: '01', title: 'Sustainable Sourcing', desc: 'Responsibly sourcing coffee and cocoa with full traceability — connecting ethical buyers to verified Ugandan producers.' },
+  { num: '01', title: 'Sustainable Sourcing', desc: 'Responsibly sourcing coffee and cocoa with full traceability; connecting ethical buyers to verified Ugandan producers.' },
   { num: '02', title: 'EUDR Compliance', desc: 'Supporting companies in meeting EU Deforestation Regulation requirements through documentation, GIS mapping and risk assessment.' },
   { num: '03', title: 'Carbon Accounting', desc: 'Helping companies discover and manage their environmental impact through rigorous carbon accounting and sustainability reporting.' },
   { num: '04', title: 'Farmer Training', desc: 'Training smallholder farmers on climate-smart agriculture, post-harvest handling and value addition technologies.' },
@@ -246,7 +285,7 @@ const testimonials = [
     avatar: "/assets/img/test_2.jpg"
   },
   {
-    quote: "The first consignment I bought from Ngite Space was cocoa and its quality told a story of commitment to meeting customer needs and changing lives of farming communities. Their model with climate change activism puts sustainability at the forefront — I'm sure of continued partnership.",
+    quote: "The first consignment I bought from Ngite Space was cocoa and its quality told a story of commitment to meeting customer needs and changing lives of farming communities. Their model with climate change activism puts sustainability at the forefront. I'm sure of continued partnership.",
     name: "Joylet Musimenta",
     role: "Cocoa Buyer",
     org: "Kasese",

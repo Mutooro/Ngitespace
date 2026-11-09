@@ -8,10 +8,7 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Donate</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Support Our <em>Mission</em></h1>
         <p>Help us build climate resilience and greener value chains for coffee &amp; cocoa communities</p>
       </div>
@@ -46,10 +43,10 @@
         </div>
 
         <div class="trust-badge">
-          <i class="fa fa-shield"></i>
+          <i class="fa fa-shield" aria-hidden="true"></i>
           <div>
-            <strong>Secure &amp; Trusted</strong>
-            <span>Your donation is processed securely. We are a registered social enterprise committed to full transparency.</span>
+            <strong>Registered social enterprise</strong>
+            <span>This form records a pledge — no payment is taken on this page. We follow up by email with payment instructions and a receipt.</span>
           </div>
         </div>
       </div>
@@ -58,8 +55,8 @@
         <div class="form-card">
           <div class="form-card-header">
             <i class="fas fa-hand-holding-heart"></i>
-            <h3>Donation Form</h3>
-            <p>Fill in the form below to complete your donation</p>
+            <h3>Pledge a Donation</h3>
+            <p>Fill in the form below and our team will follow up with payment instructions.</p>
           </div>
           <div class="form-container" style="padding: 24px;">
             <form @submit.prevent="submitForm" class="custom-form">
@@ -107,7 +104,7 @@
                 <i v-else class="fas fa-spinner fa-spin"></i>
               </button>
               
-              <div v-if="formStatus" :class="['form-status', formStatus.type]">
+              <div v-if="formStatus" :class="['form-status', formStatus.type]" role="status" aria-live="polite">
                 {{ formStatus.message }}
               </div>
             </form>
@@ -133,6 +130,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const scrollProgress = ref(0)
@@ -140,9 +138,9 @@ const impactRef = ref(null)
 
 const impactStats = ref([
   { value: 2400, displayValue: 0, label: 'Farmers Supported', suffix: '+' },
-  { value: 8, displayValue: 0, label: 'Countries Active', suffix: '' },
-  { value: 15, displayValue: 0, label: 'Projects Funded', suffix: '+' },
-  { value: 100, displayValue: 0, label: 'Goes to Impact', suffix: '%' }
+  { value: 3, displayValue: 0, label: 'Districts Reached', suffix: '' },
+  { value: 4, displayValue: 0, label: 'Active Projects', suffix: '' },
+  { value: 100, displayValue: 0, label: 'Households Supported', suffix: '+' }
 ])
 
 const animateImpactStats = () => {
@@ -265,7 +263,7 @@ const donationUses = [
   },
   {
     icon: 'fas fa-chart-line',
-    title: 'Research &amp; Advocacy',
+    title: 'Research & Advocacy',
     description: 'Evidence-based policy work for systemic change'
   }
 ]
@@ -503,7 +501,6 @@ onUnmounted(() => {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  outline: none;
   border-color: var(--sage);
   background: #ffffff;
   box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.1);

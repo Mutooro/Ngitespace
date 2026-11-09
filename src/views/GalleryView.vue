@@ -5,10 +5,7 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Gallery</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Photo <em>Gallery</em></h1>
       </div>
     </section>
@@ -21,17 +18,19 @@
       </div>
 
       <div class="gallery-grid">
-        <div 
-          v-for="(image, index) in galleryImages" 
-          :key="index" 
+        <button
+          v-for="(image, index) in galleryImages"
+          :key="image.src"
+          type="button"
           class="gallery-item"
+          :aria-label="`Open full-size photo: ${image.alt}`"
           @click="showImg(index)"
         >
-          <img :src="image.src" :alt="image.alt">
+          <img :src="image.src" :alt="image.alt" loading="lazy">
           <div class="gallery-overlay">
-            <i class="fas fa-search-plus"></i>
+            <i class="fas fa-search-plus" aria-hidden="true"></i>
           </div>
-        </div>
+        </button>
       </div>
     </section>
 
@@ -49,14 +48,11 @@
         <h2>Want to see more of our <em>work</em>?</h2>
         <p>Follow us on social media for more updates, photos, and stories from our projects across Uganda.</p>
         <div class="social-links">
-          <a href="https://instagram.com/ngite_space" target="_blank" class="social-btn">
-            <i class="fab fa-instagram"></i> Instagram
+          <a href="https://instagram.com/ngite_space" target="_blank" rel="noopener" class="social-btn">
+            <i class="fab fa-instagram" aria-hidden="true"></i> Instagram
           </a>
-          <a href="https://x.com/ngitespace" target="_blank" class="social-btn">
-            <i class="fab fa-twitter"></i> Twitter
-          </a>
-          <a href="#" target="_blank" class="social-btn">
-            <i class="fab fa-facebook-f"></i> Facebook
+          <a href="https://x.com/ngitespace" target="_blank" rel="noopener" class="social-btn">
+            <i class="fab fa-twitter" aria-hidden="true"></i> Twitter
           </a>
         </div>
       </div>
@@ -65,6 +61,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 
@@ -171,6 +168,9 @@ const handleHide = () => {
   aspect-ratio: 1;
   cursor: pointer;
   display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
   background: var(--offwhite);
 }
 
@@ -181,7 +181,8 @@ const handleHide = () => {
   transition: transform 0.3s ease;
 }
 
-.gallery-item:hover img {
+.gallery-item:hover img,
+.gallery-item:focus-visible img {
   transform: scale(1.05);
 }
 
@@ -199,7 +200,8 @@ const handleHide = () => {
   transition: opacity 0.3s ease;
 }
 
-.gallery-item:hover .gallery-overlay {
+.gallery-item:hover .gallery-overlay,
+.gallery-item:focus-visible .gallery-overlay {
   opacity: 1;
 }
 

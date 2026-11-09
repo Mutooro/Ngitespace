@@ -5,12 +5,9 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Projects</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Our <em>Projects</em></h1>
-        <p>Climate action through community empowerment — driving change across Uganda's coffee and cocoa growing regions.</p>
+        <p>Climate action through community empowerment, driving change across Uganda's coffee and cocoa growing regions.</p>
       </div>
     </section>
 
@@ -26,15 +23,15 @@
     <section class="blog-section">
       <div class="blog-header">
         <span class="section-label">What We Do</span>
-        <!-- <h3 class="section-title">We Currently Run the Following <em>Projects</em></h3> -->
+        <h2 class="section-title">We Currently Run the Following <em>Projects</em></h2>
         <p class="section-desc">Each initiative is designed to create lasting impact at the intersection of environmental sustainability and community wellbeing.</p>
       </div>
 
       <div class="blog-grid">
-        <article v-for="(project, index) in projects" :key="index" class="blog-card">
+        <article v-for="project in projects" :key="project.title" class="blog-card">
           <div class="blog-thumb">
             <span class="blog-meta">{{ project.tag }}</span>
-            <img :src="project.image" :alt="project.title">
+            <img :src="project.image" :alt="project.title" loading="lazy">
           </div>
           <div class="blog-content">
             <span class="blog-date">Project {{ project.numText }}</span>
@@ -42,15 +39,15 @@
               {{ project.title }} <em>{{ project.titleAccent }}</em>
             </h3>
             <p class="blog-excerpt">{{ project.paragraphs[0] }}</p>
-            
+
             <div class="project-highlight-mini">
-              <i :class="project.highlightIcon"></i>
+              <i :class="project.highlightIcon" aria-hidden="true"></i>
               <span>{{ project.highlightText }}</span>
             </div>
 
             <div class="project-actions-mini">
-              <router-link to="/donate" class="btn-donate-mini"><i class="fas fa-heart" style="margin-right:6px;"></i> Donate Now</router-link>
-              <router-link to="/contact" class="blog-link" style="color:var(--sage);"><i class="fas fa-arrow-right" style="margin-right:4px;"></i> Learn More</router-link>
+              <router-link to="/donate" class="btn-donate-mini"><i class="fas fa-heart" aria-hidden="true" style="margin-right:6px;"></i> Donate Now</router-link>
+              <router-link to="/contact" class="blog-link" style="color:var(--sage);"><i class="fas fa-arrow-right" aria-hidden="true" style="margin-right:4px;"></i> Learn More</router-link>
             </div>
           </div>
         </article>
@@ -78,6 +75,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const impactRef = ref(null)
@@ -85,7 +83,7 @@ const impactRef = ref(null)
 const impactStats = ref([
   { value: 4, displayValue: 0, label: 'Active Projects' },
   { value: 100, displayValue: 0, label: 'Households Supported', suffix: '+' },
-  { value: 5000, displayValue: 0, label: 'MT Waste Processed Daily', suffix: '+' },
+  { value: 5000, displayValue: 0, label: 'MT Waste Released Daily', suffix: '+' },
   { value: 3, displayValue: 0, label: 'Districts Reached' }
 ])
 
@@ -152,7 +150,7 @@ const projects = [
   {
     numText: 'Two',
     tag: 'Food Security',
-    image: '/assets/img/others/card_img_3.jpg',
+    image: '/assets/img/New_Images/gettyimages-518782849-612x612.jpg',
     title: 'Food Security for Coffee',
     titleAccent: 'Communities',
     paragraphs: [
@@ -176,7 +174,7 @@ const projects = [
   {
     numText: 'Four',
     tag: 'Waste Management',
-    image: '/assets/img/others/card_img_2.jpg',
+    image: '/assets/img/climate-change/event_card_img_1.jpg',
     title: 'Responsible',
     titleAccent: 'Waste',
     paragraphs: [

@@ -5,10 +5,7 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Services & Products</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Our Services <em>& Products</em></h1>
       </div>
     </section>
@@ -16,9 +13,9 @@
     <!-- SERVICES INTRO -->
     <section class="services-intro">
       <div class="services-intro-img">
-        <img src="/assets/img/New_Images/smell_coffee.jpg" alt="Ngite Space operations">
+        <img src="/assets/img/image_4.jpg" alt="Coffee drying on a Ngite Space model farm" width="1000" height="480" loading="lazy">
         <div class="services-intro-badge">
-          <strong>12+</strong>
+          <strong>11</strong>
           <span>Core Services</span>
         </div>
       </div>
@@ -45,17 +42,18 @@
         <p>We operate across the full spectrum of sustainable agriculture, climate action, and responsible trade —
           delivering impact from the farm gate to international markets.</p>
       </div>
-      <div class="filter-bar">
+      <div class="filter-bar" role="group" aria-label="Filter services by category">
         <button v-for="filter in filters" :key="filter.id" class="filter-btn"
-          :class="{ active: currentFilter === filter.id }" @click="currentFilter = filter.id">
+          :class="{ active: currentFilter === filter.id }" :aria-pressed="currentFilter === filter.id ? 'true' : 'false'"
+          @click="currentFilter = filter.id">
           {{ filter.label }}
         </button>
       </div>
       <div class="services-grid">
-        <div v-for="(service, index) in filteredServices" :key="index" class="service-card show">
-          <div class="card-glow"></div>
+        <div v-for="service in filteredServices" :key="service.title" class="service-card show">
+          <div class="card-glow" aria-hidden="true"></div>
           <span class="service-num">{{ formatNum(service.num) }}</span>
-          <div class="service-icon"><i :class="service.icon"></i></div>
+          <div class="service-icon" aria-hidden="true"><i :class="service.icon"></i></div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
         </div>
@@ -75,7 +73,7 @@
       <div class="products-grid">
         <div v-for="product in products" :key="product.title" class="product-card">
           <div class="product-img">
-            <img :src="product.image" :alt="product.title">
+            <img :src="product.image" :alt="product.title" loading="lazy">
           </div>
           <div class="product-info">
             <span class="product-tag">{{ product.tag }}</span>
@@ -89,15 +87,15 @@
     <!-- WHY CHOOSE US -->
     <section class="why-section">
       <div class="why-header">
-        <span class="section-label" style="color: var(--sage);">Why Ngite Space</span>
+        <span class="section-label">Why Ngite Space</span>
         <h2 class="section-title">Why Work <em>With Us</em></h2>
         <p>We combine deep local expertise with international standards to deliver measurable impact across the value
           chain.</p>
       </div>
       <div class="why-grid">
         <div v-for="reason in reasons" :key="reason.title" class="why-card">
-          <div class="why-icon"><i :class="reason.icon"></i></div>
-          <h4>{{ reason.title }}</h4>
+          <div class="why-icon" aria-hidden="true"><i :class="reason.icon"></i></div>
+          <h3>{{ reason.title }}</h3>
           <p>{{ reason.description }}</p>
         </div>
       </div>
@@ -115,8 +113,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import Breadcrumbs from '../components/Breadcrumbs.vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const currentFilter = ref('all')
 const filters = [
   { id: 'all', label: 'All Services' },
@@ -133,7 +134,7 @@ const services = [
   { num: 4, category: 'sourcing', icon: 'fas fa-certificate', title: 'Phyto Sanitary Services', description: 'Expert Phyto Sanitary services for agricultural export commodities, ensuring full compliance with international plant health standards.' },
   { num: 5, category: 'compliance', icon: 'fas fa-file-shield', title: 'EUDR Due Diligence', description: 'Supporting companies in meeting EU Deforestation Regulation requirements through robust documentation and comprehensive risk assessment.' },
   { num: 6, category: 'compliance', icon: 'fas fa-map-location-dot', title: 'Farm Data Management', description: 'Advanced data management solutions for farms to ensure full EUDR compliance and data-driven supply chain transparency.' },
-  { num: 7, category: 'compliance', icon: 'fas fa-tree-circle-exclamation', title: 'Deforestation Risk Analysis', description: 'Scientific analysis of deforestation risks to help companies maintain ethical supply chains and protect critical forest ecosystems.' },
+  { num: 7, category: 'compliance', icon: 'fas fa-tree', title: 'Deforestation Risk Analysis', description: 'Scientific analysis of deforestation risks to help companies maintain ethical supply chains and protect critical forest ecosystems.' },
   { num: 8, category: 'compliance', icon: 'fas fa-earth-africa', title: 'GIS Services', description: 'Geographic Information System services for precise farm mapping, land-use monitoring, and spatial analysis to support traceability.' },
   { num: 9, category: 'climate', icon: 'fas fa-bullhorn', title: 'Climate Advocacy', description: 'Climate change education, public campaigns, and policy advocacy to drive systemic change and environmental resilience.' },
   { num: 10, category: 'training', icon: 'fas fa-wheat-awn', title: 'Food Security Training', description: 'Food security and post-harvest loss management trainings to help farming communities build resilience and reduce waste.' },
@@ -144,6 +145,15 @@ const filteredServices = computed(() => {
   if (currentFilter.value === 'all') return services
   return services.filter(s => s.category === currentFilter.value)
 })
+
+const applyCategory = (category) => {
+  if (category && filters.some(f => f.id === category)) {
+    currentFilter.value = category
+  }
+}
+
+onMounted(() => applyCategory(route.query.category))
+watch(() => route.query.category, applyCategory)
 
 const formatNum = (n) => n < 10 ? `0${n}` : n
 

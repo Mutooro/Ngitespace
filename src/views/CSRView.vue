@@ -5,10 +5,7 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Our CSR</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Our Corporate <em>Social Responsibility</em></h1>
       </div>
     </section>
@@ -23,7 +20,7 @@
         <div class="csr-grid">
           <div v-for="item in csrItems" :key="item.title" class="csr-card">
             <div class="csr-img">
-              <img :src="item.image" :alt="item.title">
+              <img :src="item.image" :alt="item.title" loading="lazy">
             </div>
             <div class="csr-content">
               <h3>{{ item.num }}. {{ item.title }}</h3>
@@ -46,17 +43,18 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 const csrItems = [
   {
     num: 1,
     title: 'Supporting Climate Change Disaster victims',
-    image: '/assets/img/others/card_img_1.jpg',
+    image: '/assets/img/agriculture/event_card_img_2.jpg',
     desc: 'At Ngite Space, we provide support to communities affected by climate-related disasters, such as floods, drought, and storms. We work with local authorities and NGOs to provide essential aid, including school bursaries, food, shelter, and medical care.'
   },
   {
     num: 2,
     title: 'School climate change clubs',
-    image: '/assets/img/others/card_img_3.jpg',
+    image: '/assets/img/agriculture/event_card_img_1.jpg',
     desc: 'We have established and supported climate change clubs in schools to educate students about the impacts of climate change and promote sustainability. We inspire the next generations of environmental leaders.'
   },
   {
@@ -68,7 +66,7 @@ const csrItems = [
   {
     num: 4,
     title: 'Responsible waste disposal',
-    image: '/assets/img/others/card_img_2.jpg',
+    image: '/assets/img/climate-change/event_card_img_1.jpg',
     desc: 'We collect domestic and industrial waste, sort it and help to dispose it in a more responsible way. This project is aimed at reducing Greenhouse Gases resulting from poor handling of waste.'
   }
 ]

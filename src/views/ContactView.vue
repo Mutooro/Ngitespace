@@ -5,18 +5,16 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Contact Us</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Get In <em>Touch</em></h1>
       </div>
     </section>
 
     <!-- CONTACT INFO CARDS -->
-    <section class="contact-cards">
+    <section class="contact-cards" aria-labelledby="contact-cards-title">
+      <h2 id="contact-cards-title" class="sr-only">How to reach us</h2>
       <div v-for="card in contactCards" :key="card.title" class="contact-card">
-        <div class="contact-card-icon"><i :class="card.icon"></i></div>
+        <div class="contact-card-icon" aria-hidden="true"><i :class="card.icon"></i></div>
         <h3>{{ card.title }}</h3>
         <p v-html="card.content"></p>
       </div>
@@ -63,11 +61,11 @@
             
             <button type="submit" class="btn-primary submit-btn" :disabled="isSubmitting">
               <span>{{ isSubmitting ? 'Sending...' : 'Send Message' }}</span>
-              <i v-if="!isSubmitting" class="fas fa-paper-plane"></i>
-              <i v-else class="fas fa-spinner fa-spin"></i>
+              <i v-if="!isSubmitting" class="fas fa-paper-plane" aria-hidden="true"></i>
+              <i v-else class="fas fa-spinner fa-spin" aria-hidden="true"></i>
             </button>
-            
-            <div v-if="formStatus" :class="['form-status', formStatus.type]">
+
+            <div v-if="formStatus" :class="['form-status', formStatus.type]" role="status" aria-live="polite">
               {{ formStatus.message }}
             </div>
           </form>
@@ -76,49 +74,50 @@
       
       <div class="contact-sidebar">
         <div class="sidebar-card">
-          <h4>Office Hours</h4>
+          <h3>Office Hours</h3>
           <ul class="sidebar-info">
             <li>
-              <i class="fas fa-clock"></i>
-              <div><strong style="color:var(--forest);">Monday – Friday</strong><br>8:00 AM – 5:00 PM EAT</div>
+              <i class="fas fa-clock" aria-hidden="true"></i>
+              <div><strong>Monday – Friday</strong><br>8:00 AM – 5:00 PM EAT</div>
             </li>
             <li>
-              <i class="fas fa-calendar-xmark"></i>
-              <div><strong style="color:var(--forest);">Saturday & Sunday</strong><br>Closed</div>
+              <i class="fas fa-calendar-xmark" aria-hidden="true"></i>
+              <div><strong>Saturday &amp; Sunday</strong><br>Closed</div>
             </li>
           </ul>
         </div>
 
         <div class="sidebar-card">
-          <h4>Quick Contact</h4>
+          <h3>Quick Contact</h3>
           <ul class="sidebar-info">
             <li>
-              <i class="fas fa-map-marker-alt"></i>
+              <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
               <div>Mutungo, Nakawa Division<br>P.O Box 188312, Kampala</div>
             </li>
             <li>
-              <i class="fas fa-phone"></i>
+              <i class="fas fa-phone" aria-hidden="true"></i>
               <div><a href="tel:+256763965806">+256 763 965 806</a></div>
               <div><a href="tel:+256393002153">+256 393 002 153</a></div>
+              <!-- <div><a href="https://wa.me/256779642488" target="_blank" rel="noopener">WhatsApp: +256 779 642 488</a></div> -->
             </li>
             <li>
-              <i class="fas fa-envelope"></i>
+              <i class="fas fa-envelope" aria-hidden="true"></i>
               <div><a href="mailto:info@ngitespace.com">info@ngitespace.com</a></div>
             </li>
           </ul>
           <div class="sidebar-social">
-            <a href="https://instagram.com/ngite_space" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://x.com/ngitespace" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/ngite_space" target="_blank" rel="noopener" aria-label="Ngite Space on Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://x.com/ngitespace" target="_blank" rel="noopener" aria-label="Ngite Space on X"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+            <a href="https://wa.me/256779642488" target="_blank" rel="noopener" aria-label="Chat with Ngite Space on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com/company/ngite-space-limited" target="_blank" rel="noopener" aria-label="Ngite Space on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
           </div>
         </div>
 
         <div class="sidebar-card dark-sidebar">
-          <h4 style="color: #fff;">Why Reach Out?</h4>
+          <h3>Why Reach Out?</h3>
           <ul class="why-list">
             <li v-for="reason in whyReachOut" :key="reason">
-              <i class="fas fa-check-circle"></i> {{ reason }}
+              <i class="fas fa-check-circle" aria-hidden="true"></i> {{ reason }}
             </li>
           </ul>
         </div>
@@ -128,12 +127,12 @@
     <!-- MAP SECTION -->
     <section class="map-section">
       <div class="map-header">
-        <span class="section-label" style="color: var(--sage);">Find Us</span>
+        <span class="section-label">Find Us</span>
         <h2 class="section-title">Our <em>Location</em></h2>
         <p>Visit our office in Mutungo, Nakawa Division, Kampala</p>
       </div>
       <div class="map-embed">
-        <iframe
+        <iframe title="Map of Ngite Space Limited in Mutungo, Kampala"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7573851899975!2d32.6121!3d0.3217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbb0000000001%3A0x1!2sMutungo%2C%20Kampala!5e0!3m2!1sen!2sug!4v1700000000000!5m2!1sen!2sug"
           allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
@@ -151,12 +150,14 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { reactive, ref } from 'vue'
 
 const contactCards = [
   { icon: 'fas fa-map-marker-alt', title: 'Office Location', content: 'Mutungo, Nakawa Division<br>P.O Box 188312, Kampala, Uganda' },
   { icon: 'fas fa-envelope', title: 'Email Address', content: '<a href="mailto:info@ngitespace.com">info@ngitespace.com</a>' },
-  { icon: 'fas fa-phone', title: 'Phone Number', content: '<a href="tel:+256763965806">+256 763 965 806</a>' }
+  { icon: 'fas fa-phone', title: 'Phone Number', content: '<a href="tel:+256763965806">+256 763 965 806</a>' },
+ 
 ]
 
 const whyReachOut = [
@@ -291,7 +292,6 @@ const submitForm = async () => {
 
 .form-group input:focus,
 .form-group textarea:focus {
-  outline: none;
   border-color: var(--sage);
   background: #ffffff;
   box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.1);

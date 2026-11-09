@@ -8,11 +8,7 @@
       <div class="page-hero-bg" id="heroBg" :style="{ transform: `translateY(${heroScroll * 0.3}px)` }"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep"><router-link to="/blog">Blog</router-link></li>
-          <li class="sep">Publication</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Climate Change &amp; <em>Resource Sustainability</em></h1>
         <div class="hero-meta">
           <span><i class="fas fa-calendar-alt"></i> Ngite Space Research</span>
@@ -26,7 +22,7 @@
     <div class="article-layout">
       <!-- MAIN CONTENT -->
       <article class="article-content">
-        <p class="lead-text">Sustainable global trade increasingly demands accountability for environmental harm, especially deforestation tied to agricultural products like coffee. The EU Deforestation Regulation (EUDR), set to take effect in December 2024, requires products entering the EU to be traceable to land that has not been deforested.</p>
+        <p class="lead-text">Sustainable global trade increasingly demands accountability for environmental harm, especially deforestation tied to agricultural products like coffee. The EU Deforestation Regulation (EUDR), which applies from 30 December 2025 for large operators and 30 June 2026 for micro and small enterprises, requires products entering the EU to be traceable to land that has not been deforested.</p>
 
         <p>This presents a challenge for countries like Uganda, whose coffee exports heavily rely on the EU market.</p>
 
@@ -58,15 +54,23 @@
           <h3>Share Your <em style="font-style:italic; color:var(--gold);">Thoughts</em></h3>
           <p>Your email address will not be published. Required fields are marked *</p>
           <form class="comment-form" @submit.prevent="handleComment">
-            <textarea placeholder="Write your comment *" required v-model="commentData.text"></textarea>
+            <label class="sr-only" for="comment-text">Your comment</label>
+            <textarea id="comment-text" placeholder="Write your comment *" required v-model="commentData.text"></textarea>
             <div class="form-row">
-              <input type="text" placeholder="Your Name *" required v-model="commentData.name">
-              <input type="email" placeholder="Your Email *" required v-model="commentData.email">
+              <div>
+                <label class="sr-only" for="comment-name">Your name</label>
+                <input id="comment-name" type="text" placeholder="Your Name *" required v-model="commentData.name">
+              </div>
+              <div>
+                <label class="sr-only" for="comment-email">Your email</label>
+                <input id="comment-email" type="email" placeholder="Your Email *" required v-model="commentData.email">
+              </div>
             </div>
             <button type="submit" class="comment-submit" :disabled="isSubmitting">
-              <span v-if="submitted"><i class="fas fa-check"></i> Comment Submitted!</span>
-              <span v-else>Post Comment <i class="fas fa-paper-plane"></i></span>
+              <span v-if="submitted"><i class="fas fa-check" aria-hidden="true"></i> Comment Submitted!</span>
+              <span v-else>Post Comment <i class="fas fa-paper-plane" aria-hidden="true"></i></span>
             </button>
+            <p class="sr-only" role="status" aria-live="polite">{{ submitted ? 'Comment submitted.' : '' }}</p>
           </form>
         </div>
       </article>
@@ -118,6 +122,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const scrollProgress = ref(0)

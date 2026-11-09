@@ -5,19 +5,16 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">BEYCO</li>
-        </ol>
-        <h2>BEYCO — <em>Digital Traceability</em> for Coffee & Cocoa</h2>
+        <Breadcrumbs />
+        <h1>BEYCO: <em>Digital Traceability</em> for Coffee & Cocoa</h1>
       </div>
     </section>
 
     <!-- WHAT IS BEYCO -->
     <section class="who-we-are">
       <div class="who-images">
-        <img src="/assets/img/New_Images/eudr.webp" alt="BEYCO Platform" class="who-img-main">
-        <img src="/assets/img/coffee1.jpg" alt="Coffee farming" class="who-img-accent">
+        <img src="/assets/img/10122026/IMG_5783.webp" alt="BEYCO Platform" class="who-img-main" loading="lazy" width="800" height="530">
+        <img src="/assets/img/coffee1.jpg" alt="Coffee farming" class="who-img-accent" loading="lazy" width="1080" height="449">
       </div>
       <div>
         <span class="section-label">What is BEYCO</span>
@@ -72,17 +69,25 @@
     <!-- WHY BEYCO -->
     <section class="what-we-do">
       <div class="what-header">
-        <span class="section-label" style="color: var(--sage);">Why BEYCO</span>
+        <span class="section-label">Why BEYCO</span>
         <h2 class="section-title">Six Ways BEYCO <em>Strengthens</em> Your Position</h2>
-        <p>BEYCO aims to strengthen the market position of every actor in the value chain — from smallholder farmers to international buyers.</p>
+        <p>BEYCO aims to strengthen the market position of every actor in the value chain from smallholder farmers to international buyers.</p>
       </div>
       <div class="what-grid">
-        <div v-for="(feature, index) in features" :key="feature.num" 
-             class="what-item" :class="{ open: openWhat === index }"
-             @click="openWhat = openWhat === index ? -1 : index">
-          <div class="what-num">{{ feature.num }}</div>
-          <h4>{{ feature.title }} <span class="expand-icon">{{ openWhat === index ? '−' : '+' }}</span></h4>
-          <p>{{ feature.desc }}</p>
+        <div v-for="(feature, index) in features" :key="feature.num"
+             class="what-item" :class="{ open: openWhat === index }">
+          <div class="what-num" aria-hidden="true">{{ feature.num }}</div>
+          <h4>
+            <button type="button" class="what-toggle"
+              :aria-expanded="openWhat === index ? 'true' : 'false'"
+              :aria-controls="`beyco-feature-${index}`"
+              @click="openWhat = openWhat === index ? -1 : index">
+              {{ feature.title }}<span class="expand-icon" aria-hidden="true">{{ openWhat === index ? '−' : '+' }}</span>
+            </button>
+          </h4>
+          <div class="what-panel" :id="`beyco-feature-${index}`" role="region" :aria-label="feature.title">
+            <p>{{ feature.desc }}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -95,12 +100,12 @@
         <p>Discover why businesses trust Ngite Space to lead their sustainability and climate resilience journeys.</p>
       </div>
       <div class="testi-slider">
-        <button class="testi-arrow prev" @click="prevSlide"><i class="fas fa-arrow-left"></i></button>
+        <button class="testi-arrow prev" aria-label="Previous testimonial" @click="prevSlide"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
         <div class="testi-track">
           <div class="testi-slides" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-            <div v-for="(testi, index) in testimonials" :key="index" class="testi-slide" :class="{ active: currentSlide === index }">
-              <div class="testi-big-quote">"</div>
-              <div class="stars"><i v-for="n in 5" :key="n" class="fas fa-star"></i></div>
+            <div v-for="(testi, index) in testimonials" :key="index" class="testi-slide" :class="{ active: currentSlide === index }" :inert="currentSlide !== index">
+              <div class="testi-big-quote" aria-hidden="true">"</div>
+              <div class="stars" role="img" aria-label="Rated 5 out of 5"><i v-for="n in 5" :key="n" class="fas fa-star" aria-hidden="true"></i></div>
               <blockquote>{{ testi.quote }}</blockquote>
               <div class="testi-divider"></div>
               <div class="testi-person">
@@ -114,10 +119,14 @@
             </div>
           </div>
         </div>
-        <button class="testi-arrow next" @click="nextSlide"><i class="fas fa-arrow-right"></i></button>
+        <button class="testi-arrow next" aria-label="Next testimonial" @click="nextSlide"><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
       </div>
-      <div class="carousel-controls">
-        <div v-for="(_, index) in testimonials" :key="index" class="carousel-dot" :class="{ active: currentSlide === index }" @click="currentSlide = index"></div>
+      <div class="carousel-controls" role="group" aria-label="Choose testimonial">
+        <button v-for="(testi, index) in testimonials" :key="index" type="button" class="carousel-dot"
+          :class="{ active: currentSlide === index }"
+          :aria-label="`Show testimonial from ${testi.name}`"
+          :aria-current="currentSlide === index ? 'true' : undefined"
+          @click="currentSlide = index"></button>
       </div>
     </section>
 
@@ -133,6 +142,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const countersRef = ref(null)
@@ -213,7 +223,7 @@ const testimonials = [
     avatar: "/assets/img/test_1.JPG"
   },
   {
-    quote: "I have visited Ngite Space model farms for both cocoa and coffee — providing a learning opportunity in the areas of farming and trade. Ngite Space provides market for cocoa and coffee produced by smallholder farmers.",
+    quote: "I have visited Ngite Space model farms for both cocoa and coffee providing a learning opportunity in the areas of farming and trade. Ngite Space provides market for cocoa and coffee produced by smallholder farmers.",
     name: "Mbabazi Flaviah",
     role: "Environmentalist",
     org: "Bundibugyo",

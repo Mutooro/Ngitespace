@@ -1,10 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+
 import HomeView from '../views/HomeView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
-const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [
+export const routes = [
         {
             path: '/',
             name: 'home',
@@ -70,22 +68,38 @@ const router = createRouter({
             name: 'eventDetails',
             component: () => import('../views/EventDetailsView.vue')
         },
+        {
+            path: '/privacy-policy',
+            name: 'privacyPolicy',
+            component: () => import('../views/PrivacyPolicyView.vue')
+        },
+        {
+            path: '/terms-and-conditions',
+            name: 'termsAndConditions',
+            component: () => import('../views/TermsAndConditionsView.vue')
+        },
+        {
+            path: '/cookies-policy',
+            name: 'cookiesPolicy',
+            component: () => import('../views/CookiesPolicyView.vue')
+        },
+        {
+            path: '/cookie-settings',
+            name: 'cookieSettings',
+            component: () => import('../views/CookieSettingsView.vue')
+        },
         // 404 Catch-All
         {
             path: '/:pathMatch(.*)*',
             name: 'not-found',
             component: NotFoundView
         }
-    ],
-    scrollBehavior() {
-        return { top: 0 }
-    }
-})
+    ]
 
-router.afterEach((to) => {
-    const baseTitle = 'Ngite Space Limited — Greener Value Chains'
-    const pageTitle = to.name ? to.name.charAt(0).toUpperCase() + to.name.slice(1).replace(/([A-Z])/g, ' $1') : ''
-    document.title = pageTitle ? `${pageTitle} | ${baseTitle}` : baseTitle
-})
-
-export default router
+export const routerOptions = {
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    if (to.hash) return { el: to.hash }
+    return { top: 0 }
+  }
+}

@@ -4,7 +4,7 @@
       <div class="page-hero-bg" style="background-image: url('/assets/img/page_heading_bg.jpg');"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <h1>404 — Page <em>Not Found</em></h1>
+        <h1>404 - Page <em>Not Found</em></h1>
         <p>Oops! The page you're looking for doesn't exist or has been moved.</p>
         <router-link to="/" class="btn-primary" style="margin-top: 24px;">
           Back to Home <i class="fas fa-arrow-right"></i>

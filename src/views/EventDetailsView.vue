@@ -5,10 +5,7 @@
       <div class="page-hero-bg" id="heroBg"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep">Event Details</li>
-        </ol>
+        <Breadcrumbs />
         <h1>Event <em>Details</em></h1>
       </div>
     </section>
@@ -17,7 +14,7 @@
     <section class="event-content-section">
       <div class="event-main">
         <article class="event-article">
-          <img :src="event.image" :alt="event.title" class="event-feature-img">
+          <img :src="event.image" :alt="event.title" class="event-feature-img" loading="lazy">
           <h2>{{ event.title }}</h2>
           <p class="lead-text">{{ event.intro }}</p>
 
@@ -54,37 +51,46 @@
         <div class="sidebar-card">
           <h3>Contact Us:</h3>
           <form @submit.prevent="submitContactForm" class="event-contact-form">
+            <label class="sr-only" for="event-name">Your name</label>
             <input
+              id="event-name"
               v-model="form.name"
               type="text"
               placeholder="Your Name"
               class="form-input"
               required
             >
+            <label class="sr-only" for="event-email">Your email</label>
             <input
+              id="event-email"
               v-model="form.email"
               type="email"
               placeholder="Your Email"
               class="form-input"
               required
             >
+            <label class="sr-only" for="event-phone">Mobile number</label>
             <input
+              id="event-phone"
               v-model="form.phone"
               type="tel"
               placeholder="Mobile Number"
               class="form-input"
               required
             >
+            <label class="sr-only" for="event-message">Your message</label>
             <textarea
+              id="event-message"
               v-model="form.message"
               placeholder="Type Your Comment"
               rows="4"
               class="form-textarea"
             ></textarea>
-            <button type="submit" class="btn-submit">
-              Contact Now
-              <i class="fas fa-arrow-right"></i>
+            <button type="submit" class="btn-submit" :disabled="isSubmitting">
+              {{ isSubmitting ? 'Sending…' : 'Contact Now' }}
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </button>
+            <p v-if="formStatus" :class="['form-status', formStatus.type]" role="status" aria-live="polite">{{ formStatus.message }}</p>
           </form>
         </div>
 
@@ -92,20 +98,17 @@
         <div class="sidebar-card">
           <h3>Share This Event</h3>
           <div class="social-share">
-            <a href="#" class="share-btn" title="Facebook">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="share-btn" title="Instagram">
-              <i class="fab fa-instagram"></i>
-            </a>
-            <a href="#" class="share-btn" title="LinkedIn">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a href="#" class="share-btn" title="Twitter">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="share-btn" title="WhatsApp">
-              <i class="fab fa-whatsapp"></i>
+            <a
+              v-for="link in shareLinks"
+              :key="link.label"
+              :href="link.href"
+              class="share-btn"
+              :aria-label="link.label"
+              :title="link.label"
+              target="_blank"
+              rel="noopener"
+            >
+              <i :class="link.icon" aria-hidden="true"></i>
             </a>
           </div>
         </div>
@@ -115,7 +118,17 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref } from 'vue'
+import { SITE_URL } from '../seo'
+
+const pageUrl = `${SITE_URL}/event-details`
+const shareLinks = [
+  { label: 'Share on Facebook', icon: 'fab fa-facebook-f', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}` },
+  { label: 'Share on X', icon: 'fab fa-twitter', href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}` },
+  { label: 'Share on LinkedIn', icon: 'fab fa-linkedin-in', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}` },
+  { label: 'Share on WhatsApp', icon: 'fab fa-whatsapp', href: `https://wa.me/?text=${encodeURIComponent(pageUrl)}` }
+]
 
 const form = ref({
   name: '',
@@ -126,7 +139,7 @@ const form = ref({
 
 const event = {
   title: 'A Beacon of Knowledge Symposium',
-  image: '/assets/img/others/event_details_1.jpg',
+  image: '/assets/img/agriculture/event_card_img_3.jpg',
   intro: 'Embark on a journey of enlightenment with our Learning Lighthouse symposium. This educational event brings together passionate speakers and experts to illuminate the path of knowledge. Join us for insightful discussions, workshops, and interactive sessions designed to empower minds and inspire a lifelong love for learning.',
   paragraphs: [
     'Together, let\'s build a brighter future through education!',
@@ -177,15 +190,41 @@ const event = {
   ]
 }
 
-const submitContactForm = () => {
-  // Handle form submission
-  console.log('Form submitted:', form.value)
-  alert('Thank you for your interest! We will contact you soon.')
-  form.value = {
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
+const isSubmitting = ref(false)
+const formStatus = ref(null)
+
+const submitContactForm = async () => {
+  isSubmitting.value = true
+  formStatus.value = null
+
+  try {
+    const response = await fetch('https://formspree.io/f/mgonpzke', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: form.value.name,
+        email: form.value.email,
+        _replyto: form.value.email,
+        phone: form.value.phone,
+        subject: 'Event enquiry',
+        _subject: 'Event enquiry — A Beacon of Knowledge Symposium',
+        message: form.value.message
+      })
+    })
+
+    if (response.ok) {
+      formStatus.value = { type: 'success', message: 'Thank you! Your enquiry has been sent.' }
+      form.value = { name: '', email: '', phone: '', message: '' }
+    } else {
+      formStatus.value = { type: 'error', message: 'Oops! There was a problem sending your enquiry.' }
+    }
+  } catch (error) {
+    formStatus.value = { type: 'error', message: 'Oops! There was a problem sending your enquiry.' }
+  } finally {
+    isSubmitting.value = false
   }
 }
 </script>
@@ -344,7 +383,6 @@ const submitContactForm = () => {
 
 .form-input:focus,
 .form-textarea:focus {
-  outline: none;
   border-color: var(--sage);
   box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1);
 }
@@ -372,6 +410,33 @@ const submitContactForm = () => {
 .btn-submit:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(45, 106, 79, 0.3);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.form-status {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.form-status.success {
+  background: rgba(82, 183, 136, 0.12);
+  color: var(--leaf);
+  border: 1px solid rgba(82, 183, 136, 0.3);
+}
+
+.form-status.error {
+  background: rgba(220, 53, 69, 0.1);
+  color: #b02a37;
+  border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
 /* Social Share */

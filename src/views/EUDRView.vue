@@ -8,11 +8,7 @@
       <div class="page-hero-bg" id="heroBg" :style="{ transform: `translateY(${heroScroll * 0.3}px)` }"></div>
       <div class="page-hero-overlay"></div>
       <div class="page-hero-content">
-        <ol class="breadcrumb">
-          <li><router-link to="/">Home</router-link></li>
-          <li class="sep"><router-link to="/services">Services</router-link></li>
-          <li class="sep">EUDR Compliance</li>
-        </ol>
+        <Breadcrumbs />
         <h1>EU Deforestation <em>Regulation</em></h1>
         <div class="hero-meta">
           <span><i class="fas fa-shield-halved"></i> EUDR Compliance Guide</span>
@@ -27,7 +23,7 @@
       <!-- MAIN CONTENT -->
       <article class="article-content">
         <div class="article-feature-img">
-          <img src="/assets/img/New_Images/eudr.webp" alt="Deforestation and forest conservation">
+          <img src="/assets/img/10122026/IMG_5783.webp" alt="Deforestation and forest conservation" loading="lazy" width="800" height="530">
         </div>
 
         <p class="lead-text">The EU Deforestation Regulation bans the importation of items associated with deforestation internationally in order to lessen the carbon footprint of the EU with respect to imported agricultural products.</p>
@@ -62,15 +58,15 @@
 
         <h3 id="section-details"><i class="fas fa-file-lines"></i> Details</h3>
         <p>The European Union Deforestation Regulation (EUDR) is aimed at guaranteeing that the select products sold or produced within the EU do not contribute to deforestation or forest degradation worldwide.</p>
-        <p>The EUDR currently focuses on the import and export of seven key commodities to/from the European Union that are considered to have the largest impacts on global deforestation — cattle, soy, palm oil, wood/timber, coffee, cocoa, and rubber — and certain products derived from these commodities.</p>
+        <p>The EUDR currently focuses on the import and export of seven key commodities to/from the European Union that are considered to have the largest impacts on global deforestation; cattle, soy, palm oil, wood/timber, coffee, cocoa, and rubber and certain products derived from these commodities.</p>
 
         <h3 id="section-compliance"><i class="fas fa-clipboard-check"></i> What Companies Need to Do</h3>
         <ul class="checklist">
-          <li><strong>Understand scope</strong> — of all products and suppliers.</li>
-          <li><strong>Establish traceability</strong> — obtain GPS coordinates of all plots of land.</li>
-          <li><strong>Assess risk</strong> — based on criteria including deforestation pressures.</li>
-          <li><strong>Take mitigation actions</strong> — ensure negligible risk.</li>
-          <li><strong>Submit due diligence statement</strong> — to centralized registry.</li>
+          <li><strong>Understand scope</strong> of all products and suppliers.</li>
+          <li><strong>Establish traceability</strong> obtain GPS coordinates of all plots of land.</li>
+          <li><strong>Assess risk</strong> based on criteria including deforestation pressures.</li>
+          <li><strong>Take mitigation actions</strong> ensure negligible risk.</li>
+          <li><strong>Submit due diligence statement</strong> to centralized registry.</li>
         </ul>
 
         <h3 id="section-oversight"><i class="fas fa-gavel"></i> Oversight & Penalties</h3>
@@ -81,15 +77,23 @@
           <h3>Share Your <em style="font-style:italic; color:var(--gold);">Thoughts</em></h3>
           <p>Your email address will not be published. Required fields are marked *</p>
           <form class="comment-form" @submit.prevent="handleComment">
-            <textarea placeholder="Write your comment *" required v-model="commentData.text"></textarea>
+            <label class="sr-only" for="comment-text">Your comment</label>
+            <textarea id="comment-text" placeholder="Write your comment *" required v-model="commentData.text"></textarea>
             <div class="form-row">
-              <input type="text" placeholder="Your Name *" required v-model="commentData.name">
-              <input type="email" placeholder="Your Email *" required v-model="commentData.email">
+              <div>
+                <label class="sr-only" for="comment-name">Your name</label>
+                <input id="comment-name" type="text" placeholder="Your Name *" required v-model="commentData.name">
+              </div>
+              <div>
+                <label class="sr-only" for="comment-email">Your email</label>
+                <input id="comment-email" type="email" placeholder="Your Email *" required v-model="commentData.email">
+              </div>
             </div>
             <button type="submit" class="comment-submit" :disabled="isSubmitting">
-              <span v-if="submitted"><i class="fas fa-check"></i> Comment Submitted!</span>
-              <span v-else>Post Comment <i class="fas fa-paper-plane"></i></span>
+              <span v-if="submitted"><i class="fas fa-check" aria-hidden="true"></i> Comment Submitted!</span>
+              <span v-else>Post Comment <i class="fas fa-paper-plane" aria-hidden="true"></i></span>
             </button>
+            <p class="sr-only" role="status" aria-live="polite">{{ submitted ? 'Comment submitted.' : '' }}</p>
           </form>
         </div>
       </article>
@@ -142,6 +146,7 @@
 </template>
 
 <script setup>
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const scrollProgress = ref(0)

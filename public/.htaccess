@@ -1,8 +1,22 @@
+# Apache config for the prerendered (vite-ssg) build.
+#
+# The build emits a real <route>.html for every route in src/router, so nothing
+# needs to be funnelled through index.html. The previous config rewrote every
+# unknown path to index.html, which returned the home page shell for /about,
+# /services and friends, and turned genuine 404s into soft 200s.
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+
+  # Serve requests that already map to a file or directory untouched.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # /about -> /about.html, the prerendered page for that route.
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
 </IfModule>
+
+ErrorDocument 404 /404.html
